@@ -98,35 +98,8 @@ function LogoTitle(): JSX.Element {
 // add icon in dropdown menu: https://blog.consisty.com/react-native/dropdown_with_images/
 function ModalScreen({ navigation }): JSX.Element {
     //datetimepicker
-
     const [date, setDate] = useState(new Date())
-    /*
-    const [selectedDate, setSelectedDate] = useState();
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
-
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    };
-
-    const handleConfirm = (datetime) => {
-        setSelectedDate(datetime);
-        hideDatePicker();
-    };
-    */
-    /* // Another way to show date and time picker
-    <Text>{`Date:  ${selectedDate? moment(selectedDate).format("MM/DD/YYYY"):"Please select date"}`}</Text>
-    <Button title="Select Time" onPress={showDatePicker} />
-    <DateTimePickerModal
-                    isVisible={isDatePickerVisible}
-                    mode="datetime"
-                    onConfirm={handleConfirm}
-                    onCancel={hideDatePicker}
-                />
-    */
     // duration
     const [DurationValue, setDurationValue] = useState(5);
 
@@ -215,7 +188,6 @@ function ModalScreen({ navigation }): JSX.Element {
 
             <Button title="Submit" onPress={handleSubmit} />
         </View>
-
     );
 }
 
