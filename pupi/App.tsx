@@ -30,9 +30,12 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-// Modal, for popup form
-import Modal from "react-native-modal";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+// Modal/Form
+import Modal from "react-native-modal"; // not used
+import DatePicker from 'react-native-date-picker'
+import DateTimePickerModal from "react-native-modal-datetime-picker"; //not used
+import moment from 'moment'; //not used
+import NumericInput from 'react-native-numeric-input'
 import DropDownPicker from 'react-native-dropdown-picker';
 
 // Calendar
@@ -95,53 +98,112 @@ function LogoTitle(): JSX.Element {
 // add icon in dropdown menu: https://blog.consisty.com/react-native/dropdown_with_images/
 function ModalScreen(): JSX.Element {
     //datetimepicker
+
+    const [date, setDate] = useState(new Date())
+    /*
+    const [selectedDate, setSelectedDate] = useState();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
     const showDatePicker = () => {
-      setDatePickerVisibility(true);
+        setDatePickerVisibility(true);
     };
 
     const hideDatePicker = () => {
-      setDatePickerVisibility(false);
+        setDatePickerVisibility(false);
     };
 
     const handleConfirm = (datetime) => {
-      //console.warn("A date has been picked: ", datetime);
-      hideDatePicker();
+        setSelectedDate(datetime);
+        hideDatePicker();
     };
+    */
+    /* // Another way to show date and time picker
+    <Text>{`Date:  ${selectedDate? moment(selectedDate).format("MM/DD/YYYY"):"Please select date"}`}</Text>
+    <Button title="Select Time" onPress={showDatePicker} />
+    <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode="datetime"
+                    onConfirm={handleConfirm}
+                    onCancel={hideDatePicker}
+                />
+    */
+    // duration
+    const [DurationValue, setDurationValue] = useState(5);
 
     //dropdownpicker
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-        {label: 'Separate hard', value: 'pu_shape1'},
-        {label: 'Italy', value: 'pu_shape2'},
-        {label: 'Italy', value: 'pu_shape3'},
-        {label: 'Italy', value: 'pu_shape4'},
-        {label: 'Italy', value: 'pu_shape5'},
-        {label: 'Italy', value: 'pu_shape6'},
-        {label: 'Italy', value: 'pu_shape7'}
+    const [ShapeOpen, setShapeOpen] = useState(false);
+    const onShapeOpen = () => {setColorOpen(false);};
+    const [ShapeValue, setShapeValue] = useState('pu_shape3');
+    const [ShapeItems, setShapeItems] = useState([
+        {label: 'Constipation Stool: Separate hard lumps', value: 'pu_shape1'},
+        {label: 'Constipation Stool: Sausage-shaped but firm and lumpy', value: 'pu_shape2'},
+        {label: 'Normal Stool: Thicker bust soft, with cracks on the surface', value: 'pu_shape3'},
+        {label: 'Normal Stool: Smooth, soft, uniform', value: 'pu_shape4'},
+        {label: 'Stool Lacks Fiber: Soft blobs with clear-cut edges', value: 'pu_shape5'},
+        {label: 'Diarrhea Stool: Fluffy, mushy consistency with ragged edges', value: 'pu_shape6'},
+        {label: 'Diarrhea Stool: Watery, liquid with no solid pieces', value: 'pu_shape7'}
     ]);
 
+    const [ColorOpen, setColorOpen] = useState(false);
+    const onColorOpen = () => {setShapeOpen(false);};
+    const [ColorValue, setColorValue] = useState('pu_color3');
+    const [ColorItems, setColorItems] = useState([
+        {label: 'Black', value: 'pu_color1'},
+        {label: 'Dark Brown', value: 'pu_color2'},
+        {label: 'Brown', value: 'pu_color3'},
+        {label: 'Light Brown', value: 'pu_color4'},
+        {label: 'Green', value: 'pu_color5'},
+    ]);
+
+    //textinput
+    const [Textvalue, onChangeText] = React.useState(null);
     return (
         <View>
-            <Text>This is a modal!</Text>
-            <Button title="Show Datetime Picker" onPress={showDatePicker} />
-            <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="datetime"
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
+
+            <Text>Time</Text>
+            <DatePicker date={date} onDateChange={setDate} />
+
+            <Text>Duration</Text>
+            <Text><NumericInput
+                minValue = {0}
+                value={DurationValue}
+                onChange={setDurationValue}
             />
+            <Text>minutes</Text></Text>
+
+            <Text>Shape</Text>
             <DropDownPicker
-                open={open}
-                value={value}
-                items={items}
-                setOpen={setOpen}
-                setValue={setValue}
-                setItems={setItems}
+                open={ShapeOpen}
+                onOpen={onShapeOpen}
+                value={ShapeValue}
+                items={ShapeItems}
+                setOpen={setShapeOpen}
+                setValue={setShapeValue}
+                setItems={setShapeItems}
+                dropDownDirection={"AUTO"}
             />
 
+            <Text>Shape</Text>
+            <DropDownPicker
+                open={ColorOpen}
+                onOpen={onColorOpen}
+                value={ColorValue}
+                items={ColorItems}
+                setOpen={setColorOpen}
+                setValue={setColorValue}
+                setItems={setColorItems}
+                dropDownDirection={"AUTO"}
+            />
+            <Text>Side Note</Text>
+            <TextInput
+                editable
+                multiline
+                numberOfLines={2}
+                maxLength={40}
+                onChangeText={text => onChangeText(text)}
+                value={Textvalue}
+                placeholder="Side note about pu"
+            />
         </View>
 
     );
