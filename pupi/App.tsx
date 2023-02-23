@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   Button,
@@ -15,6 +15,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TextInput,
   useColorScheme,
   View,
 } from 'react-native';
@@ -31,6 +32,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // Modal, for popup form
 import Modal from "react-native-modal";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DropDownPicker from 'react-native-dropdown-picker';
 
 // Calendar
 import {Calendar, Agenda} from 'react-native-calendars'
@@ -44,7 +47,7 @@ type SectionProps = PropsWithChildren<{
  *
  */
 /*TODO: implement loading data, and display format*/
-// fix: if no entry, no loading sign
+// fix: no entry, no loading sign
 function DetailScreen(): JSX.Element {
   return (
     <SafeAreaView style={styles.container}>
@@ -71,28 +74,77 @@ function DetailScreen(): JSX.Element {
  * Description: The logo part of the navigation bar (header).
  *
  */
-/*TODO: change to app logo, maybe in the center */
+/*TODO: add app logo, maybe in the center */
 function LogoTitle(): JSX.Element {
-  return (
-    <View>
-          <Text>Pupi</Text>
-    </View>
-  );
+    return (
+        <View>
+            <Text>Pupi</Text>
+        </View>
+    );
 }
 
 /* ModalScreen()
  * Description: The form for users to input their pupi record
- *
+ * stool shape chart: https://www.webmd.com/digestive-disorders/poop-chart-bristol-stool-scale
  */
-/*TODO: change to input form */
-// need add button
+/*TODO: input form */
+// need add button, textinput, datetimepicker, dropdownpicker
 // implement local storage
+// https://www.youtube.com/watch?v=D4dDN4nXSns
+// passing data between screens in navigation
+// add icon in dropdown menu: https://blog.consisty.com/react-native/dropdown_with_images/
 function ModalScreen(): JSX.Element {
-  return (
-    <View>
-      <Text>This is a modal!</Text>
-    </View>
-  );
+    //datetimepicker
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    const showDatePicker = () => {
+      setDatePickerVisibility(true);
+    };
+
+    const hideDatePicker = () => {
+      setDatePickerVisibility(false);
+    };
+
+    const handleConfirm = (datetime) => {
+      //console.warn("A date has been picked: ", datetime);
+      hideDatePicker();
+    };
+
+    //dropdownpicker
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [items, setItems] = useState([
+        {label: 'Separate hard', value: 'pu_shape1'},
+        {label: 'Italy', value: 'pu_shape2'},
+        {label: 'Italy', value: 'pu_shape3'},
+        {label: 'Italy', value: 'pu_shape4'},
+        {label: 'Italy', value: 'pu_shape5'},
+        {label: 'Italy', value: 'pu_shape6'},
+        {label: 'Italy', value: 'pu_shape7'}
+    ]);
+
+    return (
+        <View>
+            <Text>This is a modal!</Text>
+            <Button title="Show Datetime Picker" onPress={showDatePicker} />
+            <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="datetime"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+            />
+            <DropDownPicker
+                open={open}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setValue={setValue}
+                setItems={setItems}
+            />
+
+        </View>
+
+    );
 }
 
 const Stack = createNativeStackNavigator();
@@ -112,7 +164,7 @@ export function App(): JSX.Element {
               options={({ navigation }) => ({
                 headerTitle: (props) => <LogoTitle {...props} />,
                 headerRight: () => (
-                  /*TODO: change to add icon*/
+                  /*TODO: add icon*/
                   <Button
                     onPress={() => navigation.navigate('Add')}
                     title="Add"
