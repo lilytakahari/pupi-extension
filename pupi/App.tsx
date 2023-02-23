@@ -96,37 +96,10 @@ function LogoTitle(): JSX.Element {
 // https://www.youtube.com/watch?v=D4dDN4nXSns
 // passing data between screens in navigation
 // add icon in dropdown menu: https://blog.consisty.com/react-native/dropdown_with_images/
-function ModalScreen(): JSX.Element {
+function ModalScreen({ navigation }): JSX.Element {
     //datetimepicker
-
     const [date, setDate] = useState(new Date())
-    /*
-    const [selectedDate, setSelectedDate] = useState();
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
-
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    };
-
-    const handleConfirm = (datetime) => {
-        setSelectedDate(datetime);
-        hideDatePicker();
-    };
-    */
-    /* // Another way to show date and time picker
-    <Text>{`Date:  ${selectedDate? moment(selectedDate).format("MM/DD/YYYY"):"Please select date"}`}</Text>
-    <Button title="Select Time" onPress={showDatePicker} />
-    <DateTimePickerModal
-                    isVisible={isDatePickerVisible}
-                    mode="datetime"
-                    onConfirm={handleConfirm}
-                    onCancel={hideDatePicker}
-                />
-    */
     // duration
     const [DurationValue, setDurationValue] = useState(5);
 
@@ -156,10 +129,18 @@ function ModalScreen(): JSX.Element {
     ]);
 
     //textinput
-    const [Textvalue, onChangeText] = React.useState(null);
+    const [TextValue, onChangeText] = React.useState(null);
+
+    // Submit
+    // Handle the value passing here
+    const handleSubmit = (event) => {
+        alert(TextValue);
+        event.preventDefault();
+        navigation.navigate('Detail')
+    }
+
     return (
         <View>
-
             <Text>Time</Text>
             <DatePicker date={date} onDateChange={setDate} />
 
@@ -201,11 +182,12 @@ function ModalScreen(): JSX.Element {
                 numberOfLines={2}
                 maxLength={40}
                 onChangeText={text => onChangeText(text)}
-                value={Textvalue}
+                value={TextValue}
                 placeholder="Side note about pu"
             />
-        </View>
 
+            <Button title="Submit" onPress={handleSubmit} />
+        </View>
     );
 }
 
