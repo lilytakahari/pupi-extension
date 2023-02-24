@@ -60,6 +60,7 @@ function PuForm(props) {
         alert(TextValue);
         event.preventDefault();
         props.navigation.navigate('Detail')
+        // insert Realm usage here
     }
 
     return (

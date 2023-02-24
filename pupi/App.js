@@ -81,9 +81,7 @@ export function App() {
                 headerRight: () => (
                   /*TODO: add icon*/
                   <Button
-                    onPress={() => navigation.navigate('Add', {
-                      onSubmitForm: handleSubmit,
-                    })}
+                    onPress={() => navigation.navigate('Add')}
                     title="Add"
                     color="#cc00cc"
                   />
