@@ -9,6 +9,12 @@ import DatePicker from 'react-native-date-picker';
 import NumericInput from 'react-native-numeric-input';
 import DropDownPicker from 'react-native-dropdown-picker';
 
+import {Session} from '../models/Session';
+import {SessionRealmContext} from '../models';
+
+
+const {useRealm, useQuery, useObject} = SessionRealmContext;
+
 /* PuForm()
  * Description: The form for users to input their pupi record
  * stool shape chart: https://www.webmd.com/digestive-disorders/poop-chart-bristol-stool-scale
@@ -20,6 +26,9 @@ import DropDownPicker from 'react-native-dropdown-picker';
 // passing data between screens in navigation
 // add icon in dropdown menu: https://blog.consisty.com/react-native/dropdown_with_images/
 function PuForm(props) {
+    const realm = useRealm();
+    
+
     //datetimepicker
     const [date, setDate] = useState(new Date())
 
@@ -39,6 +48,15 @@ function PuForm(props) {
         {label: 'Diarrhea Stool: Fluffy, mushy consistency with ragged edges', value: 'pu_shape6'},
         {label: 'Diarrhea Stool: Watery, liquid with no solid pieces', value: 'pu_shape7'}
     ]);
+    const pu_shape_map = {
+        'pu_shape1': 1,
+        'pu_shape2': 2,
+        'pu_shape3': 3,
+        'pu_shape4': 4,
+        'pu_shape5': 5,
+        'pu_shape6': 6,
+        'pu_shape7': 7,
+    }
 
     const [ColorOpen, setColorOpen] = useState(false);
     const onColorOpen = () => {setShapeOpen(false);};
@@ -50,9 +68,16 @@ function PuForm(props) {
         {label: 'Light Brown', value: 'pu_color4'},
         {label: 'Green', value: 'pu_color5'},
     ]);
+    const pu_color_map = {
+        'pu_color1': 'Black',
+        'pu_color2': 'Dark Brown',
+        'pu_color3': 'Brown',
+        'pu_color4': 'Light Brown',
+        'pu_color5': 'Green',
+    }
 
     //textinput
-    const [TextValue, onChangeText] = useState(null);
+    const [TextValue, onChangeText] = useState('');
 
     // Submit
     // Handle the value passing here
@@ -61,6 +86,18 @@ function PuForm(props) {
         event.preventDefault();
         props.navigation.navigate('Detail')
         // insert Realm usage here
+        const new_form = {
+            pupi_type: 'pu',
+            timestamp: date,
+            duration: DurationValue,
+            stool_shape: pu_shape_map[ShapeValue],
+            color: pu_color_map[ColorValue],
+            notes: TextValue,
+        }
+        realm.write(() => {
+            return new Session(realm, new_form);
+        });
+
     }
 
     return (

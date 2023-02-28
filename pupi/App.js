@@ -68,7 +68,7 @@ const Stack = createNativeStackNavigator();
  * Description: Main app function
  *
  */
-export function App() {
+export default function App() {
   return (
     <NavigationContainer>
           <Stack.Navigator>
@@ -117,5 +117,3 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-
-export default App;

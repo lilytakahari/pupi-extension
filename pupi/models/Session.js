@@ -1,8 +1,8 @@
 import {Realm} from '@realm/react';
 
 export class Session extends Realm.Object {
-  constructor(realm, description) {
-    super(realm, {description});
+  constructor(realm, session_obj) {
+    super(realm, session_obj);
   }
 
   // To use a class as a Realm object type in JS, define the object schema on the static property "schema".

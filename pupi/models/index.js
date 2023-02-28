@@ -1,4 +1,4 @@
-import {createRealmContext} from '@realm/react';
+import {Realm, createRealmContext} from '@realm/react';
 import {Session} from './Session';
 
 export const SessionRealmContext = createRealmContext({
