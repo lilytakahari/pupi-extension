@@ -1,5 +1,7 @@
 # CS 205 Health Analytics Project - Pupi
-Professor: Majid Sarrafzadeh ans Ramin Ramezani
+
+Professor: Majid Sarrafzadeh and Ramin Ramezani
+
 Students: Lily Takahari and Yu-Hsuan Liu
 
 ## Motivation
