@@ -13,8 +13,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
+        android:name="org.altbeacon.beaconreference.MainApplication"
         android:usesCleartextTraffic="true"
-        android:name="BeaconReferenceApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -29,6 +29,11 @@
         </activity>
         <activity android:name="org.altbeacon.beacon.permissions.BeaconScanPermissionsActivity"
             android:exported="false"/>
+        <activity
+            android:name="org.reactnative.MyReactActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

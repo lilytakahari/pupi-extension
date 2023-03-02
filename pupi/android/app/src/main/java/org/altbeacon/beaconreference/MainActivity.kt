@@ -15,34 +15,42 @@ import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.MonitorNotifier
 import org.altbeacon.beacon.permissions.BeaconScanPermissionsActivity
+import org.reactnative.MyReactActivity
 
 class MainActivity : AppCompatActivity() {
     lateinit var beaconListView: ListView
     lateinit var beaconCountTextView: TextView
     lateinit var monitoringButton: Button
     lateinit var rangingButton: Button
-    lateinit var beaconReferenceApplication: BeaconReferenceApplication
+    lateinit var beaconReferenceApplication: MainApplication
     var alertDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        beaconReferenceApplication = application as BeaconReferenceApplication
+        // LEE: commented out below
+        // setContentView(R.layout.activity_main)
+        beaconReferenceApplication = application as MainApplication
 
+        // LEE: moved these 2 lines here
+//        val beaconManager = BeaconManager.getInstanceForApplication(this)
+//        beaconManager.startMonitoring(beaconReferenceApplication.region)
 
+        val intent = Intent(this, MyReactActivity::class.java)
+        startActivity(intent)
 
+        // LEE: commented out all observers
         // Set up a Live Data observer for beacon data
-        val regionViewModel = BeaconManager.getInstanceForApplication(this).getRegionViewModel(beaconReferenceApplication.region)
+        // val regionViewModel = BeaconManager.getInstanceForApplication(this).getRegionViewModel(beaconReferenceApplication.region)
         // observer will be called each time the monitored regionState changes (inside vs. outside region)
-        regionViewModel.regionState.observe(this, monitoringObserver)
+        // regionViewModel.regionState.observe(this, monitoringObserver)
         // observer will be called each time a new list of beacons is ranged (typically ~1 second in the foreground)
-        regionViewModel.rangedBeacons.observe(this, rangingObserver)
-        rangingButton = findViewById<Button>(R.id.rangingButton)
-        monitoringButton = findViewById<Button>(R.id.monitoringButton)
-        beaconListView = findViewById<ListView>(R.id.beaconList)
-        beaconCountTextView = findViewById<TextView>(R.id.beaconCount)
-        beaconCountTextView.text = "No beacons detected"
-        beaconListView.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayOf("--"))
+//        regionViewModel.rangedBeacons.observe(this, rangingObserver)
+//        rangingButton = findViewById<Button>(R.id.rangingButton)
+//        monitoringButton = findViewById<Button>(R.id.monitoringButton)
+//        beaconListView = findViewById<ListView>(R.id.beaconList)
+//        beaconCountTextView = findViewById<TextView>(R.id.beaconCount)
+//        beaconCountTextView.text = "No beacons detected"
+//        beaconListView.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayOf("--"))
     }
 
     override fun onPause() {
@@ -62,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         // The code needed to get these permissions has become increasingly complex, so it is in
         // its own file so as not to clutter this file focussed on how to use the library.
 
+        // TODO: uncomment to bring back permissions
         if (!BeaconScanPermissionsActivity.allPermissionsGranted(this,
                 true)) {
             val intent = Intent(this, BeaconScanPermissionsActivity::class.java)
