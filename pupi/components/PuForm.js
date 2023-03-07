@@ -125,7 +125,7 @@ function PuForm(props) {
                 dropDownDirection={"AUTO"}
             />
 
-            <Text>Shape</Text>
+            <Text>Color</Text>
             <DropDownPicker
                 open={ColorOpen}
                 onOpen={onColorOpen}
