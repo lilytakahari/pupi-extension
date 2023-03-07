@@ -6,7 +6,9 @@
  */
 
 import DetailScreen from './components/DetailScreen';
+import AnalysisScreen from './components/AnalysisScreen';
 import PuForm from './components/PuForm';
+import PiForm from './components/PiForm';
 
 import React, { useState } from 'react';
 // import type {PropsWithChildren} from 'react';
@@ -32,12 +34,17 @@ import {
 // Navigation Libraries
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+// Icons
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 
 // Modal/Form
-import Modal from "react-native-modal"; // not used
+import Modal from "react-native-modal";
 import DatePicker from 'react-native-date-picker'
-import DateTimePickerModal from "react-native-modal-datetime-picker"; //not used
-import moment from 'moment'; //not used
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from 'moment';
 import NumericInput from 'react-native-numeric-input'
 import DropDownPicker from 'react-native-dropdown-picker';
 
@@ -60,8 +67,33 @@ function LogoTitle() {
     );
 }
 
+function Home() {
+  return (
+    <Tab.Navigator screenOptions={{ headerShown: false }} tabBarOptions={{ showLabel: false}}>
+      <Tab.Screen
+        name="Calendar"
+        component={DetailScreen}
+        options={{
+            tabBarIcon: ({ color, size }) => (
+                <Ionicons name="calendar" color={color} size={size} />
+            ),
+        }}
+      />
+      <Tab.Screen
+        name="Analysis"
+        component={AnalysisScreen}
+        options={{
+            tabBarIcon: ({ color, size }) => (
+                <Ionicons name="bar-chart" color={color} size={size} />
+            ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
 
-
+const Tab = createBottomTabNavigator();
+const SettingsStack = createNativeStackNavigator();
 const Stack = createNativeStackNavigator();
 
 /* App()
@@ -74,23 +106,30 @@ export default function App() {
           <Stack.Navigator>
           <Stack.Group>
             <Stack.Screen
-              name="Detail"
-              component={DetailScreen}
+              name="Home"
+              component={Home}
               options={({ navigation }) => ({
                 headerTitle: (props) => <LogoTitle {...props} />,
                 headerRight: () => (
-                  /*TODO: add icon*/
+                  <View style={{ flexDirection:"row" }}>
                   <Button
-                    onPress={() => navigation.navigate('Add')}
-                    title="Add"
+                    onPress={() => navigation.navigate('Pi_Add')}
+                    title="Pi_A"
                     color="#cc00cc"
                   />
+                  <Button
+                    onPress={() => navigation.navigate('Pu_Add')}
+                    title="Pu_A"
+                    color="#cc00cc"
+                  />
+                  </View>
                 ),
               })}
             />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: 'modal' }}>
-            <Stack.Screen name="Add" component={PuForm} />
+            <Stack.Screen name="Pu_Add" component={PuForm} />
+            <Stack.Screen name="Pi_Add" component={PiForm} />
           </Stack.Group>
           </Stack.Navigator>
         </NavigationContainer>
