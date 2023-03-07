@@ -18,7 +18,7 @@ const {useRealm, useQuery, useObject} = SessionRealmContext;
  * Description: Shows detailed record of your pupi.
  *
  */
-/*TODO: implement loading data, and display format*/
+/*TODO:  display format*/
 // fix: no entry, no loading sign
 // Notes: the key in the items dictionary must be the YYYY-MM-DD string, 
 // but parameters requiring just one date can accept Javascript Date object
