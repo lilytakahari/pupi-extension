@@ -7,6 +7,7 @@
 
 import DetailScreen from './components/DetailScreen';
 import PuForm from './components/PuForm';
+import PiForm from './components/PiForm';
 
 import React, { useState } from 'react';
 // import type {PropsWithChildren} from 'react';
@@ -61,7 +62,6 @@ function LogoTitle() {
 }
 
 
-
 const Stack = createNativeStackNavigator();
 
 /* App()
@@ -80,17 +80,25 @@ export default function App() {
                 headerTitle: (props) => <LogoTitle {...props} />,
                 headerRight: () => (
                   /*TODO: add icon*/
+                  <View style={{ flexDirection:"row" }}>
                   <Button
-                    onPress={() => navigation.navigate('Add')}
-                    title="Add"
+                    onPress={() => navigation.navigate('Pi_Add')}
+                    title="Pi_A"
                     color="#cc00cc"
                   />
+                  <Button
+                    onPress={() => navigation.navigate('Pu_Add')}
+                    title="Pu_A"
+                    color="#cc00cc"
+                  />
+                  </View>
                 ),
               })}
             />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: 'modal' }}>
-            <Stack.Screen name="Add" component={PuForm} />
+            <Stack.Screen name="Pu_Add" component={PuForm} />
+            <Stack.Screen name="Pi_Add" component={PiForm} />
           </Stack.Group>
           </Stack.Navigator>
         </NavigationContainer>
