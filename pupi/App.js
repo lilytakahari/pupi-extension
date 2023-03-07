@@ -6,6 +6,7 @@
  */
 
 import DetailScreen from './components/DetailScreen';
+import AnalysisScreen from './components/AnalysisScreen';
 import PuForm from './components/PuForm';
 import PiForm from './components/PiForm';
 
@@ -33,6 +34,7 @@ import {
 // Navigation Libraries
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // Modal/Form
 import Modal from "react-native-modal"; // not used
@@ -61,7 +63,17 @@ function LogoTitle() {
     );
 }
 
+function Home() {
+  return (
+    <Tab.Navigator screenOptions={{ headerShown: false }}>
+      <Tab.Screen name="Calendar" component={DetailScreen} />
+      <Tab.Screen name="Analysis" component={AnalysisScreen} />
+    </Tab.Navigator>
+  );
+}
 
+const Tab = createBottomTabNavigator();
+const SettingsStack = createNativeStackNavigator();
 const Stack = createNativeStackNavigator();
 
 /* App()
@@ -74,12 +86,11 @@ export default function App() {
           <Stack.Navigator>
           <Stack.Group>
             <Stack.Screen
-              name="Detail"
-              component={DetailScreen}
+              name="Home"
+              component={Home}
               options={({ navigation }) => ({
                 headerTitle: (props) => <LogoTitle {...props} />,
                 headerRight: () => (
-                  /*TODO: add icon*/
                   <View style={{ flexDirection:"row" }}>
                   <Button
                     onPress={() => navigation.navigate('Pi_Add')}
