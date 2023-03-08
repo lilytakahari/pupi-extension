@@ -61,7 +61,7 @@ function PiForm(props) {
     const handleSubmit = (event) => {
         alert(TextValue);
         event.preventDefault();
-        props.navigation.navigate('Detail')
+        props.navigation.navigate('Home')
         // insert Realm usage here
         const new_form = {
             pupi_type: 'pi',
