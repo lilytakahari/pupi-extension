@@ -91,7 +91,7 @@ class BeaconReferenceApplication: Application() {
     }
 
     fun setupForegroundService() {
-        val builder = Notification.Builder(this, "BeaconReferenceApp")
+        val builder = Notification.Builder(this, "Pupi")
         builder.setSmallIcon(R.drawable.ic_launcher_background)
         builder.setContentTitle("Scanning for Beacons")
         val intent = Intent(this, MainActivity::class.java)
