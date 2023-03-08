@@ -134,9 +134,9 @@ class MainApplication : Application(), ReactApplication {
         // ReactNativeFlipper.initializeFlipper(this, reactNativeHost.reactInstanceManager)
     }
     fun setupForegroundService() {
-        val builder = Notification.Builder(this, "BeaconReferenceApp")
+        val builder = Notification.Builder(this, "Pupi")
         builder.setSmallIcon(R.drawable.ic_launcher_background)
-        builder.setContentTitle("Scanning for Beacons")
+        builder.setContentTitle("Background Scanning for Toilet Beacon")
         Log.d("MainApplication", "setup foreground service")
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
@@ -144,8 +144,8 @@ class MainApplication : Application(), ReactApplication {
         )
         builder.setContentIntent(pendingIntent);
         val channel =  NotificationChannel("beacon-ref-notification-id",
-            "Good Morning", NotificationManager.IMPORTANCE_HIGH)
-        channel.setDescription("My Notification Channel Description")
+            "Toilet Beacon", NotificationManager.IMPORTANCE_HIGH)
+        channel.setDescription("You'll get notifications when you approach the sensor on your toilet.")
         val notificationManager =  getSystemService(
             Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel);
@@ -165,8 +165,8 @@ class MainApplication : Application(), ReactApplication {
 
     private fun sendNotification() {
         val builder = NotificationCompat.Builder(this, "beacon-ref-notification-id")
-            .setContentTitle("Beacon Reference Application")
-            .setContentText("A beacon is nearby.")
+            .setContentTitle("Pupi")
+            .setContentText("Are you on the toilet? This is your reminder to write it down!")
             .setSmallIcon(R.drawable.ic_launcher_background)
         val stackBuilder = TaskStackBuilder.create(this)
         stackBuilder.addNextIntent(Intent(this, MainActivity::class.java))
