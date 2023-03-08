@@ -166,7 +166,7 @@ class MainApplication : Application(), ReactApplication {
     private fun sendNotification() {
         val builder = NotificationCompat.Builder(this, "beacon-ref-notification-id")
             .setContentTitle("Pupi")
-            .setContentText("Are you on the toilet? This is your reminder to write it down!")
+            .setContentText("Are you on the toilet? Record it!")
             .setSmallIcon(R.drawable.ic_launcher_background)
         val stackBuilder = TaskStackBuilder.create(this)
         stackBuilder.addNextIntent(Intent(this, MainActivity::class.java))

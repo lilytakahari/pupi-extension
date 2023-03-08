@@ -48,10 +48,13 @@ function DetailScreen(props) {
     }
     const start = new Date(utc_timestamp - 2629800000);  // subtract one month
     const end = new Date(utc_timestamp + 2629800000); // add one month
+
+    // TODO FUTURE: no filtering, in case it doesn't work
     // const within_range = sessions.filtered("timestamp > $0 AND timestamp < $1", start, end);
     
-    
-    const within_range = sessions;
+    // added sorting
+    const within_range = sessions.sorted("timestamp");
+
     for (let i = 0; i < within_range.length; i++) {
       const key = formatDate(within_range[i]['timestamp']);
       if (key in items) {
@@ -59,6 +62,7 @@ function DetailScreen(props) {
           start: formatTime(within_range[i]['timestamp']),
           duration: within_range[i]['duration'],
           shape: within_range[i]['stool_shape'],
+          type: within_range[i]['pupi_type'],
         });
       }
     }
@@ -74,7 +78,7 @@ function DetailScreen(props) {
               <TouchableOpacity style={styles.item}>
                 <Text style={styles.itemText}>{item.start}</Text>
                 <Text style={styles.itemText}>{item.duration} mins</Text>
-                <Text style={styles.itemText}>Type {item.shape}</Text>
+                <Text style={styles.itemText}>Type{item.type=='pu'?(' '+ item.shape):''} {item.type}</Text>
               </TouchableOpacity>
             )}
             onMonthChange={loadMonth}
