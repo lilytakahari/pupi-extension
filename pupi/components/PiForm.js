@@ -66,6 +66,7 @@ function PiForm(props) {
         const new_form = {
             pupi_type: 'pi',
             timestamp: date,
+            duration: DurationValue,
             color: pi_color_map[ColorValue],
             notes: TextValue,
         }
@@ -77,9 +78,22 @@ function PiForm(props) {
 
     return (
         <View>
+            <View>
             <Text>Time</Text>
             <DatePicker date={date} onDateChange={setDate} />
+            </View>
 
+            <View>
+            <Text>Duration</Text>
+            <Text><NumericInput
+                minValue = {0}
+                value={DurationValue}
+                onChange={setDurationValue}
+            />
+            <Text>minutes</Text></Text>
+            </View>
+
+            <View style={{zIndex: 2000}}>
             <Text>Color</Text>
             <DropDownPicker
                 open={ColorOpen}
@@ -90,7 +104,12 @@ function PiForm(props) {
                 setValue={setColorValue}
                 setItems={setColorItems}
                 dropDownDirection={"AUTO"}
+                dropDownContainerStyle={{ backgroundColor: 'white',zIndex: 1000, elevation: 1000 }}
+                
             />
+            </View>
+
+            <View>
             <Text>Side Note</Text>
             <TextInput
                 editable
@@ -101,8 +120,11 @@ function PiForm(props) {
                 value={TextValue}
                 placeholder="Side note about pi"
             />
+            </View>
 
+            <View>
             <Button title="Submit" onPress={handleSubmit} />
+            </View>
         </View>
     );
 }

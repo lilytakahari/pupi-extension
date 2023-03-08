@@ -102,9 +102,12 @@ function PuForm(props) {
 
     return (
         <View>
+            <View>
             <Text>Time</Text>
             <DatePicker date={date} onDateChange={setDate} />
+            </View>
 
+            <View>
             <Text>Duration</Text>
             <Text><NumericInput
                 minValue = {0}
@@ -112,7 +115,9 @@ function PuForm(props) {
                 onChange={setDurationValue}
             />
             <Text>minutes</Text></Text>
+            </View>
 
+            <View style={{zIndex: 3000}}>
             <Text>Shape</Text>
             <DropDownPicker
                 open={ShapeOpen}
@@ -123,8 +128,11 @@ function PuForm(props) {
                 setValue={setShapeValue}
                 setItems={setShapeItems}
                 dropDownDirection={"AUTO"}
+                dropDownContainerStyle={{ backgroundColor: 'white',zIndex: 3000, elevation: 3000 }}
             />
+            </View>
 
+            <View style={{zIndex: 2000}}>
             <Text>Color</Text>
             <DropDownPicker
                 open={ColorOpen}
@@ -135,7 +143,11 @@ function PuForm(props) {
                 setValue={setColorValue}
                 setItems={setColorItems}
                 dropDownDirection={"AUTO"}
+                dropDownContainerStyle={{ backgroundColor: 'white',zIndex: 2000, elevation: 2000 }}
             />
+            </View>
+
+            <View style={{zIndex: 1000}}>
             <Text>Side Note</Text>
             <TextInput
                 editable
@@ -146,8 +158,11 @@ function PuForm(props) {
                 value={TextValue}
                 placeholder="Side note about pu"
             />
+            </View>
 
+            <View>
             <Button title="Submit" onPress={handleSubmit} />
+            </View>
         </View>
     );
 }
