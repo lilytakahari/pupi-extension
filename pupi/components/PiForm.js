@@ -104,6 +104,7 @@ function PiForm(props) {
                 setValue={setColorValue}
                 setItems={setColorItems}
                 dropDownDirection={"AUTO"}
+                listMode="MODAL"
                 dropDownContainerStyle={{ backgroundColor: 'white',zIndex: 1000, elevation: 1000 }}
                 
             />

@@ -128,6 +128,7 @@ function PuForm(props) {
                 setValue={setShapeValue}
                 setItems={setShapeItems}
                 dropDownDirection={"AUTO"}
+                listMode="MODAL"
                 dropDownContainerStyle={{ backgroundColor: 'white',zIndex: 3000, elevation: 3000 }}
             />
             </View>
@@ -143,6 +144,7 @@ function PuForm(props) {
                 setValue={setColorValue}
                 setItems={setColorItems}
                 dropDownDirection={"AUTO"}
+                listMode="MODAL"
                 dropDownContainerStyle={{ backgroundColor: 'white',zIndex: 2000, elevation: 2000 }}
             />
             </View>
