@@ -68,7 +68,15 @@ function LogoTitle() {
 
 function Home() {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }} tabBarOptions={{ showLabel: false}}>
+    <Tab.Navigator screenOptions={{ headerShown: false,
+                                    "tabBarShowLabel": false,
+                                    "tabBarStyle": [
+                                    {
+                                        "display": "flex"
+                                    },
+                                    null
+                                    ]
+                                 }}>
       <Tab.Screen
         name="Calendar"
         component={DetailScreen}
