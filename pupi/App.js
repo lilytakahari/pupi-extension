@@ -23,6 +23,7 @@ import {
   TextInput,
   useColorScheme,
   View,
+  Image
 } from 'react-native';
 
 import {
@@ -61,7 +62,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 function LogoTitle() {
     return (
         <View>
-            <Text>Pupi</Text>
+            <Text>PUPI</Text>
         </View>
     );
 }
@@ -119,14 +120,28 @@ export default function App() {
                 headerTitle: (props) => <LogoTitle {...props} />,
                 headerRight: () => (
                   <View style={{ flexDirection:"row" }}>
-                  <Ionicons.Button
-                    name="water"
-                    onPress={() => navigation.navigate('Pi_Add')}>
-                  </Ionicons.Button>
-                  <Button
-                    onPress={() => navigation.navigate('Pu_Add')}
-                    title="Pu_A"
-                  />
+                  <TouchableOpacity onPress={() => navigation.navigate('Pi_Add')}>
+                      <Image
+                        source={require('./assets/drop.png')}
+                                style={{padding: 10,
+                                margin: 5,
+                                height: 25,
+                                width: 25,
+                                resizeMode: 'stretch',
+                               }}
+                      />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => navigation.navigate('Pu_Add')}>
+                      <Image
+                        source={require('./assets/poop.png')}
+                        style={{padding: 10,
+                                margin: 5,
+                                height: 25,
+                                width: 25,
+                                resizeMode: 'stretch',
+                        }}
+                      />
+                  </TouchableOpacity>
                   </View>
                 ),
               })}
