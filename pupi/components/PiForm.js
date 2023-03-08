@@ -59,7 +59,7 @@ function PiForm(props) {
     // Submit
     // Handle the value passing here
     const handleSubmit = (event) => {
-        alert(TextValue);
+        //alert(TextValue);
         event.preventDefault();
         props.navigation.navigate('Home')
         // insert Realm usage here
