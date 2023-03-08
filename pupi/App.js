@@ -39,7 +39,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // Icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
 // Modal/Form
 import Modal from "react-native-modal";
 import DatePicker from 'react-native-date-picker'
@@ -112,15 +111,13 @@ export default function App() {
                 headerTitle: (props) => <LogoTitle {...props} />,
                 headerRight: () => (
                   <View style={{ flexDirection:"row" }}>
-                  <Button
-                    onPress={() => navigation.navigate('Pi_Add')}
-                    title="Pi_A"
-                    color="#cc00cc"
-                  />
+                  <Ionicons.Button
+                    name="water"
+                    onPress={() => navigation.navigate('Pi_Add')}>
+                  </Ionicons.Button>
                   <Button
                     onPress={() => navigation.navigate('Pu_Add')}
                     title="Pu_A"
-                    color="#cc00cc"
                   />
                   </View>
                 ),
