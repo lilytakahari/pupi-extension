@@ -75,7 +75,7 @@ function DetailScreen(props) {
             selected={new Date()}
             items={agendaItems}
             renderItem={(item, isFirst) => (
-              <TouchableOpacity style={styles.item}>
+              <TouchableOpacity style={item.type=='pu'?(styles.pu_entry):(styles.pi_entry)}>
                 <Text style={styles.itemText}>{item.start}</Text>
                 <Text style={styles.itemText}>{item.duration} mins</Text>
                 <Text style={styles.itemText}>Type{item.type=='pu'?(' '+ item.shape):''} {item.type}</Text>
@@ -95,8 +95,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center'
   },
-  item: {
-    backgroundColor: 'white',
+  pi_entry: {
+    backgroundColor: '#fffbeb',
+    flex: 1,
+    borderRadius: 5,
+    padding: 10,
+    marginRight: 10,
+    marginTop: 17,
+  },
+  pu_entry: {
+    backgroundColor: '#e6d9d3',
     flex: 1,
     borderRadius: 5,
     padding: 10,

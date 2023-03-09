@@ -42,7 +42,7 @@ function PuForm(props) {
     const [ShapeItems, setShapeItems] = useState([
         {label: 'Constipation Stool: Separate hard lumps', value: 'pu_shape1'},
         {label: 'Constipation Stool: Sausage-shaped but firm and lumpy', value: 'pu_shape2'},
-        {label: 'Normal Stool: Thicker bust soft, with cracks on the surface', value: 'pu_shape3'},
+        {label: 'Normal Stool: Thicker but soft, with cracks on the surface', value: 'pu_shape3'},
         {label: 'Normal Stool: Smooth, soft, uniform', value: 'pu_shape4'},
         {label: 'Stool Lacks Fiber: Soft blobs with clear-cut edges', value: 'pu_shape5'},
         {label: 'Diarrhea Stool: Fluffy, mushy consistency with ragged edges', value: 'pu_shape6'},
