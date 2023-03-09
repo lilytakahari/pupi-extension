@@ -58,8 +58,8 @@ const {useRealm, useQuery, useObject} = SessionRealmContext;
 /*TODO: add app logo, maybe in the center */
 function LogoTitle() {
     return (
-        <View>
-            <Text>PUPI</Text>
+        <View style={{ flexDirection:"row", alignItems:"center" }}>
+            <Text style={{ fontSize:25, fontFamily:"sans-serif-medium", }}>PUPI</Text>
         </View>
     );
 }

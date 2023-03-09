@@ -4,6 +4,7 @@ import {
     Text,
     TextInput,
     View,
+    StyleSheet,
   } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import NumericInput from 'react-native-numeric-input';
@@ -79,22 +80,22 @@ function PiForm(props) {
     return (
         <View>
             <View>
-            <Text>Time</Text>
+            <Text style={styles.titleText}>Time</Text>
             <DatePicker date={date} onDateChange={setDate} />
             </View>
 
             <View>
-            <Text>Duration</Text>
+            <Text style={styles.titleText}>Duration</Text>
             <Text><NumericInput
                 minValue = {0}
                 value={DurationValue}
                 onChange={setDurationValue}
             />
-            <Text>minutes</Text></Text>
+            <Text style={styles.itemText}>minutes</Text></Text>
             </View>
 
             <View style={{zIndex: 2000}}>
-            <Text>Color</Text>
+            <Text style={styles.titleText}>Color</Text>
             <DropDownPicker
                 open={ColorOpen}
                 onOpen={onColorOpen}
@@ -111,7 +112,7 @@ function PiForm(props) {
             </View>
 
             <View>
-            <Text>Side Note</Text>
+            <Text style={styles.titleText}>Side Note</Text>
             <TextInput
                 editable
                 multiline
@@ -124,10 +125,22 @@ function PiForm(props) {
             </View>
 
             <View>
-            <Button title="Submit" onPress={handleSubmit} />
+            <Button title="Submit" onPress={handleSubmit} style={styles.btn}/>
             </View>
         </View>
     );
 }
 
 export default PiForm;
+
+const styles = StyleSheet.create({
+  titleText: {
+    fontSize: 20,
+  },
+  itemText: {
+    color: '#888',
+    fontSize: 16,
+  },
+  btn: {
+  },
+});
