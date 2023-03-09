@@ -5,8 +5,8 @@ import {
   Text,
 } from 'react-native';
 
-import { useState } from 'react';
-
+import { useState} from 'react';
+import { View, Image } from 'react-native';
 // Calendar
 import {Agenda} from 'react-native-calendars';
 import {Session} from '../models/Session';
@@ -76,9 +76,16 @@ function DetailScreen(props) {
             items={agendaItems}
             renderItem={(item, isFirst) => (
               <TouchableOpacity style={item.type=='pu'?(styles.pu_entry):(styles.pi_entry)}>
-                <Text style={styles.itemText}>{item.start}</Text>
-                <Text style={styles.itemText}>{item.duration} mins</Text>
-                <Text style={styles.itemText}>Type{item.type=='pu'?(' '+ item.shape):''} {item.type}</Text>
+                <Image
+                    source={item.type=='pu'?(require('../assets/poop.png')):(require('../assets/drop.png'))}
+                   style={styles.entry_img}
+                />
+
+                <View>
+                    <Text style={styles.itemText}>{item.start}</Text>
+                    <Text style={styles.itemText}>{item.duration} mins</Text>
+                    <Text style={styles.itemText}>Type{item.type=='pu'?(' '+ item.shape):''} {item.type}</Text>
+                </View>
               </TouchableOpacity>
             )}
             onMonthChange={loadMonth}
@@ -102,6 +109,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 10,
     marginTop: 17,
+    flexDirection:"row",
+    alignItems:"center",
   },
   pu_entry: {
     backgroundColor: '#e6d9d3',
@@ -110,9 +119,18 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 10,
     marginTop: 17,
+    flexDirection:"row",
+    alignItems:"center",
   },
   itemText: {
     color: '#888',
     fontSize: 16,
+  },
+  entry_img: {
+    padding: 10,
+    margin: 5,
+    height: 25,
+    width: 25,
+    resizeMode: 'stretch',
   },
 });
