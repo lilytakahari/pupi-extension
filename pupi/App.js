@@ -10,7 +10,7 @@ import AnalysisScreen from './components/AnalysisScreen';
 import PuForm from './components/PuForm';
 import PiForm from './components/PiForm';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import type {PropsWithChildren} from 'react';
 import {
   Button,
@@ -40,13 +40,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // Icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-// Modal/Form
-import Modal from "react-native-modal";
-import DatePicker from 'react-native-date-picker'
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import moment from 'moment';
-import NumericInput from 'react-native-numeric-input'
-import DropDownPicker from 'react-native-dropdown-picker';
+import {Session} from './models/Session';
+import {SessionRealmContext} from './models';
+
+const {useRealm, useQuery, useObject} = SessionRealmContext;
 
 // type SectionProps = PropsWithChildren<{
 //   title: string;
@@ -109,6 +106,20 @@ const Stack = createNativeStackNavigator();
  *
  */
 export default function App() {
+  const realm = useRealm();
+  useEffect(() => {
+    
+  
+    const demo_data = require('./assets/pupi_demo_data.json')
+    for (i = 0; i < demo_data.length; i++) {
+      
+      realm.write(() => {
+        return new Session(realm, demo_data[i]);
+      });
+    }
+    console.log(demo_data.length)
+  }, []);
+  
   return (
     <NavigationContainer>
           <Stack.Navigator>
