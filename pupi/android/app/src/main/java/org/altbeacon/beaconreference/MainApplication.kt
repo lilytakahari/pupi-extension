@@ -135,7 +135,7 @@ class MainApplication : Application(), ReactApplication {
     }
     fun setupForegroundService() {
         val builder = Notification.Builder(this, "Pupi")
-        builder.setSmallIcon(R.drawable.ic_launcher_background)
+        builder.setSmallIcon(R.mipmap.ic_launcher)
         builder.setContentTitle("Background Scanning for Toilet Beacon")
         Log.d("MainApplication", "setup foreground service")
         val intent = Intent(this, MainActivity::class.java)
@@ -167,7 +167,7 @@ class MainApplication : Application(), ReactApplication {
         val builder = NotificationCompat.Builder(this, "beacon-ref-notification-id")
             .setContentTitle("Pupi")
             .setContentText("Are you on the toilet? Record it!")
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.mipmap.ic_launcher)
         val stackBuilder = TaskStackBuilder.create(this)
         stackBuilder.addNextIntent(Intent(this, MainActivity::class.java))
         val resultPendingIntent = stackBuilder.getPendingIntent(

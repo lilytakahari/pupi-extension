@@ -92,7 +92,7 @@ class BeaconReferenceApplication: Application() {
 
     fun setupForegroundService() {
         val builder = Notification.Builder(this, "Pupi")
-        builder.setSmallIcon(R.drawable.ic_launcher_background)
+        builder.setSmallIcon(R.mipmap.ic_launcher)
         builder.setContentTitle("Scanning for Beacons")
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
@@ -130,7 +130,7 @@ class BeaconReferenceApplication: Application() {
         val builder = NotificationCompat.Builder(this, "beacon-ref-notification-id")
             .setContentTitle("Beacon Reference Application")
             .setContentText("A beacon is nearby.")
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.mipmap.ic_launcher)
         val stackBuilder = TaskStackBuilder.create(this)
         stackBuilder.addNextIntent(Intent(this, MainActivity::class.java))
         val resultPendingIntent = stackBuilder.getPendingIntent(
