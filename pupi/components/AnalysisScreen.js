@@ -1,12 +1,17 @@
 import {
   SafeAreaView,
-  TouchableOpacity,
   StyleSheet,
   Text,
+  ScrollView,
+  Dimensions,
   View,
 } from 'react-native';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import {
+  LineChart,
+  BarChart,
+} from "react-native-chart-kit";
 
 // Calendar
 import {Session} from '../models/Session';
@@ -18,18 +23,208 @@ const {useRealm, useQuery, useObject} = SessionRealmContext;
  * Description: Shows analysis of your pupi record.
  *
  */
-/*TODO: Find the package to visualize data
+
+const formatDate = d => [
+  (d.getMonth() + 1).toString().padStart(2, '0'),
+  d.getDate().toString().padStart(2, '0')
+].join('/');
+
+/* 
+TODO for future: Figure out how to show daily data in the past month
+instead of just for the month so far.
+- requires more in-depth case-checking for the month dates (e.g. 2/29 does not exist)
+- could potentially use many additional Realm collections
+
 */
 function AnalysisScreen(props) {
-
-  const realm = useRealm();
+  // TODO: un-comment this line
+  // const now = new Date();
+  const now = new Date('2023-03-14T08:20')
   const sessions = useQuery(Session);
+
+  // FOR DEMO ONLY: construct the data up to today for the current month:
+  const start = new Date(now.getTime() - 2629800000);  // subtract one month
+  const end = now;
+  const within_range = sessions.filtered("timestamp > $0 AND timestamp < $1", start, end);
+
+  const month = (now.getMonth()+1).toString().padStart(2, '0');
+  const day_int = now.getDate();
+
+  const pu_count = new Map();
+  const pi_count = new Map();
+  const pu_hist = new Map();
+  for (let d = 1; d <= day_int; d++) {
+    const day = d.toString().padStart(2, '0');
+    pu_count.set(month + '/' + day,0);
+    pi_count.set(month + '/' + day,0);
+  }
+  for (let type = 1; type <= 7; type++) {
+    pu_hist.set(type, 0);
+  }
+  
+  for (let i = 0; i < within_range.length; i++) {
+    const key = formatDate(within_range[i]['timestamp']);
+    if (pu_count.has(key)) {
+      if (within_range[i]['pupi_type'] == 'pu') {
+        pu_count.set(key, pu_count.get(key) + 1);
+        const pu_type = within_range[i]['stool_shape']
+        pu_hist.set(pu_type, pu_hist.get(pu_type) + 1);
+      } else {
+        pi_count.set(key, pi_count.get(key) + 1);
+      }
+    }
+  }
+  const pu_hist_data = [];
+  for (let value of pu_hist.values()){
+    pu_hist_data.push(value);
+  }
+  const pi_data = [];
+  for (let value of pi_count.values()){
+    pi_data.push(value);
+  }
+  const pu_data = [];
+  for (let value of pu_count.values()){
+    pu_data.push(value);
+  }
+  console.log(pu_hist_data);
+  console.log(pu_data);
+  console.log(pi_data);
+  const arrAvg = arr => arr.reduce((a,b) => a + b, 0) / arr.length;
+  const weekAvg = arr => arr.reduce((a,b) => a + b, 0) / 2;
+  const pi_avg = arrAvg(pi_data).toFixed(2);
+  const pu_avg = weekAvg(pu_data).toFixed(2);
+
+  // TODO: stop hard-coding these x-axis labels
+  //-----------------vvvvvvv
+  const screenWidth = Dimensions.get("window").width;
+  const piData = {
+    labels: ["03-01", "03-07"],
+    datasets: [
+      {
+        data: pi_data,
+        color: (opacity = 1) => `rgba(252, 226, 116, ${opacity})`, // optional
+        strokeWidth: 2 // optional
+      }
+    ],
+  };
+  const puData = {
+    labels: ["03-01", "03-07"],
+    datasets: [
+      {
+        data: pu_data,
+        strokeWidth: 2 // optional
+      }
+    ],
+  };
+  const puHistData = {
+    labels: ['1', '2', '3', '4', '5', '6', '7'],
+    datasets: [
+      {
+        data: pu_hist_data,
+      }
+    ],
+  };
+  const piChartConfig = {
+    backgroundGradientFrom: "#FFFFFF",
+    backgroundGradientFromOpacity: 1,
+    backgroundGradientTo: "#FFFFFF",
+    backgroundGradientToOpacity: 1,
+    
+    color: (opacity = 1) => `rgba(252, 226, 116, ${opacity})`,
+    decimalPlaces: 1, // optional, defaults to 2dp
+    labelColor: (opacity = 1) => `rgba(100, 100, 100, ${opacity})`,
+    propsForBackgroundLines: {
+      stroke: '#DDDDDD',
+    },
+  };
+  const puChartConfig = {
+    backgroundGradientFrom: "#FFFFFF",
+    backgroundGradientFromOpacity: 1,
+    backgroundGradientTo: "#FFFFFF",
+    backgroundGradientToOpacity: 1,
+    
+    color: (opacity = 1) => `rgba(171, 106, 75, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(100, 100, 100, ${opacity})`,
+    decimalPlaces: 1, // optional, defaults to 2dp
+  };
+  const puHistChartConfig = {
+    backgroundGradientFrom: "#FFFFFF",
+    backgroundGradientFromOpacity: 1,
+    backgroundGradientTo: "#FFFFFF",
+    backgroundGradientToOpacity: 1,
+    
+    color: (opacity = 1) => `rgba(156, 67, 26, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(100, 100, 100, ${opacity})`,
+    decimalPlaces: 1, // optional, defaults to 2dp
+    barPercentage: 0.7,
+  };
+  // ^^^^^^^^^
 
 
   return (
-    <View style={styles.container}>
-        <Text>Screen for Analysis</Text>
-    </View>
+    <SafeAreaView>
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic">
+          
+          <View style={styles.item}>
+            <Text style={styles.titleText}>Histogram of Bristol Stool Types in the Past 2 Weeks</Text>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.descText}>You tend to have more constipation-form stools!
+            Check that you're drinking enough liquids and/or eating enough fiber.</Text>
+          </View>
+          <BarChart
+            data={puHistData}
+            width={screenWidth}
+            height={200}
+            chartConfig={puHistChartConfig}
+            style={{
+              borderRadius: 20,
+              paddingRight: 50,
+              marginBottom: 30,
+            }}
+            fromZero={true}
+            showValuesOnTopOfBars={true}
+            withInnerLines={false}
+          />
+          <View style={styles.item}>
+            <Text style={styles.titleText}>Count of Daily Pu in the Past 2 Weeks</Text>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.descText}>On average, you're defecating {pu_avg} times a week. 
+            This is on the lower end of the normal range for pu frequency (which is between 3 times a week to 3 times a day).</Text>
+          </View>
+          <LineChart
+            data={puData}
+            width={screenWidth}
+            height={220}
+            chartConfig={puChartConfig}
+            style={{
+              borderRadius: 20,
+              marginBottom: 30,
+            }}
+            fromZero={true}
+          />
+          <View style={styles.item}>
+            <Text style={styles.titleText}>Count of Daily Pi in the Past 2 Weeks</Text>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.descText}>On average, you're only urinating {pi_avg} times a day.
+             The normal amount is 6-7 times per day. Are you drinking enough liquids?</Text>
+          </View>
+          <LineChart
+            data={piData}
+            width={screenWidth}
+            height={220}
+            chartConfig={piChartConfig}
+            style={{
+              borderRadius: 20,
+            }}
+            fromZero={true}
+          />
+
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -43,13 +238,15 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: 'white',
     flex: 1,
-    borderRadius: 5,
+    borderRadius: 20,
     padding: 10,
-    marginRight: 10,
-    marginTop: 17,
   },
-  itemText: {
+  titleText: {
     color: '#888',
     fontSize: 16,
+  },
+  descText: {
+    color: '#888',
+    fontSize: 14,
   },
 });
