@@ -5,7 +5,7 @@ import {
   Text,
 } from 'react-native';
 
-import { useState} from 'react';
+import { useState, useEffect} from 'react';
 import { View, Image } from 'react-native';
 // Calendar
 import {Agenda} from 'react-native-calendars';
@@ -14,12 +14,29 @@ import {SessionRealmContext} from '../models';
 
 const {useRealm, useQuery, useObject} = SessionRealmContext;
 
+const formatDate = d => [
+  d.getFullYear(),
+  (d.getMonth() + 1).toString().padStart(2, '0'),
+  d.getDate().toString().padStart(2, '0')
+].join('-');
+
+function formatTime(date) {
+  return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
+}
 /* DetailScreen()
  * Description: Shows detailed record of your pupi.
  *
  */
-/*TODO:  display format*/
-// fix: no entry, no loading sign
+/*TODO for future:
+there are infinitely many things wrong with how i am using the agenda / the agenda itself
+- how to load more efficiently
+- e.g. i could add listeners onto the realm instead of brute re-populating list
+- the agenda doesn't update immediately if the agenda has items, but it works when the list is empty
+--- it updates buggily (shows another entry but with wrong data)
+- how to load when clicking on a different month (currently hard-coded to March)
+
+
+*/
 // Notes: the key in the items dictionary must be the YYYY-MM-DD string, 
 // but parameters requiring just one date can accept Javascript Date object
 function DetailScreen(props) {
@@ -27,17 +44,17 @@ function DetailScreen(props) {
   const realm = useRealm();
   const sessions = useQuery(Session);
   
-  const formatDate = d => [
-    d.getFullYear(),
-    (d.getMonth() + 1).toString().padStart(2, '0'),
-    d.getDate().toString().padStart(2, '0')
-  ].join('-');
-
-  function formatTime(date) {
-    return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
-  }
-
+  // TODO for future: you need to figure a way around this
+  useEffect(() => {
+      const cal_obj = {
+        timestamp: (new Date()).getTime(),
+        month: 3,
+        year: 2023,
+      };
+      loadMonth(cal_obj);
+    }, [sessions]);
   function loadMonth(calendar_obj) {
+    
     const items = {};
     const utc_timestamp = calendar_obj.timestamp;
     const month = calendar_obj.month.toString().padStart(2, '0');
@@ -66,7 +83,7 @@ function DetailScreen(props) {
         });
       }
     }
-    console.log(items);
+    console.log('update items');
     setAgendaItems(items);
   }
   return (
@@ -74,6 +91,7 @@ function DetailScreen(props) {
           <Agenda
             selected={new Date()}
             items={agendaItems}
+            onDayPress={loadMonth}
             renderItem={(item, isFirst) => (
               <TouchableOpacity style={item.type=='pu'?(styles.pu_entry):(styles.pi_entry)}>
                 <Image
@@ -88,8 +106,6 @@ function DetailScreen(props) {
                 </View>
               </TouchableOpacity>
             )}
-            onMonthChange={loadMonth}
-            onDayPress={loadMonth}
           />
         </SafeAreaView>
   );
