@@ -90,24 +90,23 @@ function DetailScreen(props) {
 
   function IconSource(item) {
     if (item.type=='pu'){
-
-    switch(item.shape) {
-        case 1:
-            return require('../assets/dropdownIcon/pu_shape1.png')
-            break
-        case 2:
-            return require('../assets/dropdownIcon/pu_shape2.png')
-        case 3:
-            return require('../assets/dropdownIcon/pu_shape3.png')
-        case 4:
-            return require('../assets/dropdownIcon/pu_shape4.png')
-        case 5:
-            return require('../assets/dropdownIcon/pu_shape5.png')
-        case 6:
-            return require('../assets/dropdownIcon/pu_shape6.png')
-        case 7:
-            return require('../assets/dropdownIcon/pu_shape7.png')
-    }
+        switch(item.shape) {
+            case 1:
+                return require('../assets/dropdownIcon/pu_shape1.png')
+                break
+            case 2:
+                return require('../assets/dropdownIcon/pu_shape2.png')
+            case 3:
+                return require('../assets/dropdownIcon/pu_shape3.png')
+            case 4:
+                return require('../assets/dropdownIcon/pu_shape4.png')
+            case 5:
+                return require('../assets/dropdownIcon/pu_shape5.png')
+            case 6:
+                return require('../assets/dropdownIcon/pu_shape6.png')
+            case 7:
+                return require('../assets/dropdownIcon/pu_shape7.png')
+        }
     }else{
         return require('../assets/drop.png')
     }

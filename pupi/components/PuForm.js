@@ -6,6 +6,7 @@ import {
     View,
     StyleSheet,
     Image,
+    Dimensions,
   } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import NumericInput from 'react-native-numeric-input';
@@ -14,18 +15,19 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {Session} from '../models/Session';
 import {SessionRealmContext} from '../models';
 
-
 const {useRealm, useQuery, useObject} = SessionRealmContext;
+const windowWidth = Dimensions.get('window').width;
 
 /* PuForm()
  * Description: The form for users to input their pupi record
  * shape chart: https://www.webmd.com/digestive-disorders/poop-chart-bristol-stool-scale
  * color chart: https://www.buoyhealth.com/learn/what-do-stool-colors-mean
  */
-// add icon in dropdown menu: https://blog.consisty.com/react-native/dropdown_with_images/
+// TODO: Change the format according to light mode and dark mode
+// under dark mode, Date Picker's text color will be white, which make it hard to read
+// TODO: The icons I used for stool shape are modified from the internet. I recommend redrawing them by yourself.
 function PuForm(props) {
     const realm = useRealm();
-    
 
     //datetimepicker
     const [date, setDate] = useState(new Date())
@@ -117,17 +119,19 @@ function PuForm(props) {
         <View>
             <View>
             <Text style={styles.titleText}>Time</Text>
-            <DatePicker date={date} onDateChange={setDate} />
+            <DatePicker date={date} onDateChange={setDate} style={styles.datepickerStye}/>
             </View>
 
             <View>
             <Text style={styles.titleText}>Duration</Text>
-            <Text><NumericInput
-                minValue = {0}
-                value={DurationValue}
-                onChange={setDurationValue}
-            />
-            <Text style={styles.itemText}>minutes</Text></Text>
+                <View style={styles.numericInputStyle}>
+                    <Text><NumericInput
+                        minValue = {0}
+                        value={DurationValue}
+                        onChange={setDurationValue}
+                    />
+                    <Text style={styles.itemText}>minutes</Text></Text>
+                </View>
             </View>
 
             <View style={{zIndex: 3000}}>
@@ -167,7 +171,7 @@ function PuForm(props) {
             <TextInput
                 editable
                 multiline
-                numberOfLines={2}
+                numberOfLines={3}
                 maxLength={40}
                 onChangeText={text => onChangeText(text)}
                 value={TextValue}
@@ -176,7 +180,7 @@ function PuForm(props) {
             </View>
 
             <View>
-            <Button title="Submit" onPress={handleSubmit}  style={styles.btn}/>
+            <Button title="Submit" color='#00bef8' onPress={handleSubmit}  style={styles.btn}/>
             </View>
         </View>
     );
@@ -201,4 +205,10 @@ const styles = StyleSheet.create({
     width: 25,
     resizeMode: 'stretch',
   },
+  datepickerStye:{
+    width: windowWidth
+  },
+  numericInputStyle:{
+    alignItems: 'center'
+  }
 });

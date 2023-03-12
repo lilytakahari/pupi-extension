@@ -66,11 +66,13 @@ function LogoTitle() {
 
 function Home() {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false,
-                                    "tabBarShowLabel": false,
-                                    "tabBarStyle": [
+    <Tab.Navigator
+                   screenOptions={{ headerShown: false,
+                                    tabBarShowLabel: false,
+                                    tabBarActiveTintColor: "#00bef8",
+                                    tabBarStyle: [
                                     {
-                                        "display": "flex"
+                                        display: "flex"
                                     },
                                     null
                                     ]
