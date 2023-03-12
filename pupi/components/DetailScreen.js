@@ -53,6 +53,7 @@ function DetailScreen(props) {
       };
       loadMonth(cal_obj);
     }, [sessions]);
+
   function loadMonth(calendar_obj) {
     
     const items = {};
@@ -86,6 +87,32 @@ function DetailScreen(props) {
     console.log('update items');
     setAgendaItems(items);
   }
+
+  function IconSource(item) {
+    if (item.type=='pu'){
+        switch(item.shape) {
+            case 1:
+                return require('../assets/dropdownIcon/pu_shape1.png')
+                break
+            case 2:
+                return require('../assets/dropdownIcon/pu_shape2.png')
+            case 3:
+                return require('../assets/dropdownIcon/pu_shape3.png')
+            case 4:
+                return require('../assets/dropdownIcon/pu_shape4.png')
+            case 5:
+                return require('../assets/dropdownIcon/pu_shape5.png')
+            case 6:
+                return require('../assets/dropdownIcon/pu_shape6.png')
+            case 7:
+                return require('../assets/dropdownIcon/pu_shape7.png')
+        }
+    }else{
+        return require('../assets/drop.png')
+    }
+  }
+
+  //<Text style={styles.itemText}>Type{item.type=='pu'?(' '+ item.shape):''} {item.type}</Text>
   return (
     <SafeAreaView style={styles.container}>
           <Agenda
@@ -95,14 +122,14 @@ function DetailScreen(props) {
             renderItem={(item, isFirst) => (
               <TouchableOpacity style={item.type=='pu'?(styles.pu_entry):(styles.pi_entry)}>
                 <Image
-                    source={item.type=='pu'?(require('../assets/poop.png')):(require('../assets/drop.png'))}
-                   style={styles.entry_img}
+                    source={IconSource(item)}
+                    style={styles.entry_img}
                 />
 
                 <View>
                     <Text style={styles.itemText}>{item.start}</Text>
                     <Text style={styles.itemText}>{item.duration} mins</Text>
-                    <Text style={styles.itemText}>Type{item.type=='pu'?(' '+ item.shape):''} {item.type}</Text>
+
                 </View>
               </TouchableOpacity>
             )}
