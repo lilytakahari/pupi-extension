@@ -96,7 +96,7 @@ function DetailScreen(props) {
               <TouchableOpacity style={item.type=='pu'?(styles.pu_entry):(styles.pi_entry)}>
                 <Image
                     source={item.type=='pu'?(require('../assets/poop.png')):(require('../assets/drop.png'))}
-                   style={styles.entry_img}
+                    style={styles.entry_img}
                 />
 
                 <View>

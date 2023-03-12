@@ -11,7 +11,7 @@ import PuForm from './components/PuForm';
 import PiForm from './components/PiForm';
 
 import React, { useState, useEffect } from 'react';
-// import type {PropsWithChildren} from 'react';
+
 import {
   Button,
   SafeAreaView,
@@ -134,23 +134,13 @@ export default function App() {
                   <TouchableOpacity onPress={() => navigation.navigate('Pi_Add')}>
                       <Image
                         source={require('./assets/drop.png')}
-                                style={{padding: 10,
-                                margin: 5,
-                                height: 25,
-                                width: 25,
-                                resizeMode: 'stretch',
-                               }}
+                                style={styles.headerIcon}
                       />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => navigation.navigate('Pu_Add')}>
                       <Image
                         source={require('./assets/poop.png')}
-                        style={{padding: 10,
-                                margin: 5,
-                                height: 25,
-                                width: 25,
-                                resizeMode: 'stretch',
-                        }}
+                        style={styles.headerIcon}
                       />
                   </TouchableOpacity>
                   </View>
@@ -185,5 +175,12 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  headerIcon: {
+    padding: 10,
+    margin: 5,
+    height: 25,
+    width: 25,
+    resizeMode: 'stretch',
   },
 });

@@ -5,6 +5,7 @@ import {
     TextInput,
     View,
     StyleSheet,
+    Image,
   } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import NumericInput from 'react-native-numeric-input';
@@ -18,10 +19,8 @@ const {useRealm, useQuery, useObject} = SessionRealmContext;
 
 /* PiForm()
  * Description: The form for users to input their pupi record
- *
+ * color chart: https://www.healthdirect.gov.au/urine-colour-chart
  */
-/*TODO: make sure this form can send data to realm*/
-// add icon in dropdown menu: https://blog.consisty.com/react-native/dropdown_with_images/
 function PiForm(props) {
     const realm = useRealm();
     
@@ -38,13 +37,18 @@ function PiForm(props) {
 
     const [ColorOpen, setColorOpen] = useState(false);
     const onColorOpen = () => {setShapeOpen(false);};
-    const [ColorValue, setColorValue] = useState('pi_color3');
+    const [ColorValue, setColorValue] = useState('pi_color4');
     const [ColorItems, setColorItems] = useState([
-        {label: 'Brown', value: 'pi_color1'},
-        {label: 'Dark Yellow', value: 'pi_color2'},
-        {label: 'Yellow', value: 'pi_color3'},
-        {label: 'Light Yellow', value: 'pi_color4'},
-        {label: 'Transparent', value: 'pi_color5'},
+        {label: 'Brown', value: 'pi_color1',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pi_color1.png')} style={styles.dropdownIcon}/>),},
+        {label: 'Dark Yellow', value: 'pi_color2',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pi_color2.png')} style={styles.dropdownIcon}/>),},
+        {label: 'Yellow', value: 'pi_color3',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pi_color3.png')} style={styles.dropdownIcon}/>),},
+        {label: 'Light Yellow', value: 'pi_color4',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pi_color4.png')} style={styles.dropdownIcon}/>),},
+        {label: 'Transparent', value: 'pi_color5',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pi_color5.png')} style={styles.dropdownIcon}/>),},
     ]);
     const pi_color_map = {
         'pi_color1': 'Brown',
@@ -142,5 +146,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   btn: {
+  },
+  dropdownIcon: {
+    padding: 10,
+    margin: 5,
+    height: 25,
+    width: 25,
+    resizeMode: 'stretch',
   },
 });

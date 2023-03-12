@@ -5,6 +5,7 @@ import {
     TextInput,
     View,
     StyleSheet,
+    Image,
   } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import NumericInput from 'react-native-numeric-input';
@@ -18,13 +19,9 @@ const {useRealm, useQuery, useObject} = SessionRealmContext;
 
 /* PuForm()
  * Description: The form for users to input their pupi record
- * stool shape chart: https://www.webmd.com/digestive-disorders/poop-chart-bristol-stool-scale
+ * shape chart: https://www.webmd.com/digestive-disorders/poop-chart-bristol-stool-scale
+ * color chart: https://www.buoyhealth.com/learn/what-do-stool-colors-mean
  */
-/*TODO: input form */
-// need add button, textinput, datetimepicker, dropdownpicker
-// implement local storage
-// https://www.youtube.com/watch?v=D4dDN4nXSns
-// passing data between screens in navigation
 // add icon in dropdown menu: https://blog.consisty.com/react-native/dropdown_with_images/
 function PuForm(props) {
     const realm = useRealm();
@@ -41,13 +38,20 @@ function PuForm(props) {
     const onShapeOpen = () => {setColorOpen(false);};
     const [ShapeValue, setShapeValue] = useState('pu_shape3');
     const [ShapeItems, setShapeItems] = useState([
-        {label: 'Constipation Stool: Separate hard lumps', value: 'pu_shape1'},
-        {label: 'Constipation Stool: Sausage-shaped but firm and lumpy', value: 'pu_shape2'},
-        {label: 'Normal Stool: Thicker but soft, with cracks on the surface', value: 'pu_shape3'},
-        {label: 'Normal Stool: Smooth, soft, uniform', value: 'pu_shape4'},
-        {label: 'Stool Lacks Fiber: Soft blobs with clear-cut edges', value: 'pu_shape5'},
-        {label: 'Diarrhea Stool: Fluffy, mushy consistency with ragged edges', value: 'pu_shape6'},
-        {label: 'Diarrhea Stool: Watery, liquid with no solid pieces', value: 'pu_shape7'}
+        {label: 'Constipation Stool: Separate hard lumps', value: 'pu_shape1',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pu_shape1.png')} style={styles.dropdownIcon}/>)},
+        {label: 'Constipation Stool: Sausage-shaped but firm and lumpy', value: 'pu_shape2',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pu_shape2.png')} style={styles.dropdownIcon}/>)},
+        {label: 'Normal Stool: Thicker but soft, with cracks on the surface', value: 'pu_shape3',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pu_shape3.png')} style={styles.dropdownIcon}/>)},
+        {label: 'Normal Stool: Smooth, soft, uniform', value: 'pu_shape4',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pu_shape4.png')} style={styles.dropdownIcon}/>)},
+        {label: 'Stool Lacks Fiber: Soft blobs with clear-cut edges', value: 'pu_shape5',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pu_shape5.png')} style={styles.dropdownIcon}/>)},
+        {label: 'Diarrhea Stool: Fluffy, mushy consistency with ragged edges', value: 'pu_shape6',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pu_shape6.png')} style={styles.dropdownIcon}/>)},
+        {label: 'Diarrhea Stool: Watery, liquid with no solid pieces', value: 'pu_shape7',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pu_shape7.png')} style={styles.dropdownIcon}/>)},
     ]);
     const pu_shape_map = {
         'pu_shape1': 1,
@@ -61,20 +65,28 @@ function PuForm(props) {
 
     const [ColorOpen, setColorOpen] = useState(false);
     const onColorOpen = () => {setShapeOpen(false);};
-    const [ColorValue, setColorValue] = useState('pu_color3');
+    const [ColorValue, setColorValue] = useState('pu_color2');
     const [ColorItems, setColorItems] = useState([
-        {label: 'Black', value: 'pu_color1'},
-        {label: 'Dark Brown', value: 'pu_color2'},
-        {label: 'Brown', value: 'pu_color3'},
-        {label: 'Light Brown', value: 'pu_color4'},
-        {label: 'Green', value: 'pu_color5'},
+        {label: 'Black', value: 'pu_color1',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pu_color1.png')} style={styles.dropdownIcon}/>),},
+        {label: 'Brown', value: 'pu_color2',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pu_color2.png')} style={styles.dropdownIcon}/>),},
+        {label: 'Light Brown', value: 'pu_color3',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pu_color3.png')} style={styles.dropdownIcon}/>),},
+        {label: 'Red', value: 'pu_color4',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pu_color4.png')} style={styles.dropdownIcon}/>),},
+        {label: 'Green', value: 'pu_color5',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pu_color5.png')} style={styles.dropdownIcon}/>),},
+        {label: 'Yellow', value: 'pu_color6',
+         icon: () => (<Image source={require('../assets/dropdownIcon/pu_color6.png')} style={styles.dropdownIcon}/>),},
     ]);
     const pu_color_map = {
         'pu_color1': 'Black',
-        'pu_color2': 'Dark Brown',
-        'pu_color3': 'Brown',
-        'pu_color4': 'Light Brown',
+        'pu_color2': 'Brown',
+        'pu_color3': 'Light Brown',
+        'pu_color4': 'Red',
         'pu_color5': 'Green',
+        'pu_color6': 'Yellow',
     }
 
     //textinput
@@ -181,5 +193,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   btn: {
+  },
+  dropdownIcon: {
+    padding: 10,
+    margin: 5,
+    height: 25,
+    width: 25,
+    resizeMode: 'stretch',
   },
 });
