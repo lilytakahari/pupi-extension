@@ -133,13 +133,13 @@ export default function App() {
                 headerTitle: (props) => <LogoTitle {...props} />,
                 headerRight: () => (
                   <View style={{ flexDirection:"row" }}>
-                  <TouchableOpacity onPress={() => navigation.navigate('Pi_Add')}>
+                  <TouchableOpacity onPress={() => navigation.navigate('Pi')}>
                       <Image
                         source={require('./assets/drop.png')}
                                 style={styles.headerIcon}
                       />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigation.navigate('Pu_Add')}>
+                  <TouchableOpacity onPress={() => navigation.navigate('Pu')}>
                       <Image
                         source={require('./assets/poop.png')}
                         style={styles.headerIcon}
@@ -150,9 +150,9 @@ export default function App() {
               })}
             />
           </Stack.Group>
-          <Stack.Group screenOptions={{ presentation: 'modal' }}>
-            <Stack.Screen name="Pu_Add" component={PuForm} />
-            <Stack.Screen name="Pi_Add" component={PiForm} />
+          <Stack.Group screenOptions={{ presentation: 'modal', headerTitle: false, }}>
+            <Stack.Screen name="Pu" component={PuForm} />
+            <Stack.Screen name="Pi" component={PiForm} />
           </Stack.Group>
           </Stack.Navigator>
         </NavigationContainer>
