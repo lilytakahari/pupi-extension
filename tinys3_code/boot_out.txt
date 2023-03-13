@@ -1,0 +1,3 @@
+Adafruit CircuitPython 8.0.0 on 2023-02-06; TinyS3 with ESP32S3
+Board ID:unexpectedmaker_tinys3
+UID:4F21AFF4844B
