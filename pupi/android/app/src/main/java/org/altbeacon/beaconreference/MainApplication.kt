@@ -112,10 +112,10 @@ class MainApplication : Application(), ReactApplication {
         // a UUID like Identifier.parse("2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6")
 
         // *** ESTIMOTE BEACON ID:
-        val beaconID = Identifier.parse("B9407F30-F5F8-466E-AFF1-25556B57FE6D")
+        // val beaconID = Identifier.parse("B9407F30-F5F8-466E-AFF1-25556B57FE6D")
 
         // *** CIRCUITPY BEACON ID:
-        // val beaconID = Identifier.parse("43697263-7569-7450-7974-686F6E313233")
+        val beaconID = Identifier.parse("43697263-7569-7450-7974-686F6E313233")
         region = Region("all-beacons", beaconID, null, null)
         beaconManager.startMonitoring(region)
         // beaconManager.startRangingBeacons(region)

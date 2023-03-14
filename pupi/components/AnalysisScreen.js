@@ -38,8 +38,8 @@ instead of just for the month so far.
 */
 function AnalysisScreen(props) {
   // TODO: un-comment this line
-  // const now = new Date();
-  const now = new Date('2023-03-14T08:20')
+  const now = new Date();
+  // const now = new Date('2023-03-14T08:20');
   const sessions = useQuery(Session);
 
   // FOR DEMO ONLY: construct the data up to today for the current month:
