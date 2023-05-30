@@ -7,6 +7,9 @@ Students: Lily Takahari and Yu-Hsuan Liu
 ## Motivation
 Poop and Pee Tracker
 
+## Introduction Slide
+https://docs.google.com/presentation/d/1P2yXFnlpq9aZl5t1_gkgj2-YyJRLRKgezUlgco0q6-U/edit?usp=sharing
+
 ## How to run the application?
 1. Set up the environment for Android simulator: https://reactnative.dev/docs/environment-setup. Make sure to select `React Native CLI Quickstart`. For Development OS, choose the one that you are using. For Target OS, choose `Android`.
 2. Download or clone this repo.
