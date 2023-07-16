@@ -17,7 +17,7 @@
     "@realm/react": "^0.4.3",
     "jsc-android": "^250231.0.0",
     "react": "18.2.0",
-    "react-native": "^0.71.3",
+    "react-native": "0.72.3",
     "react-native-calendars": "^1.1293.0",
     "react-native-chart-kit": "^6.12.0",
     "react-native-date-picker": "^4.2.9",
@@ -29,7 +29,7 @@
     "react-native-screens": "^3.19.0",
     "react-native-svg": "^13.8.0",
     "react-native-vector-icons": "^9.2.0",
-    "realm": "^11.5.0"
+    "realm": "^11.10.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
