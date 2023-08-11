@@ -29,21 +29,13 @@ const formatDate = d => [
   d.getDate().toString().padStart(2, '0')
 ].join('/');
 
-/* 
-TODO for future: Figure out how to show daily data in the past month
-instead of just for the month so far.
-- requires more in-depth case-checking for the month dates (e.g. 2/29 does not exist)
-- could potentially use many additional Realm collections
-
-*/
 function AnalysisScreen(props) {
   // TODO: un-comment this line
   const now = new Date();
   // const now = new Date('2023-03-14T08:20');
   const sessions = useQuery(Session);
 
-  // FOR DEMO ONLY: construct the data up to today for the current month:
-  const start = new Date(now.getTime() - 2629800000);  // subtract one month
+  const start = new Date(now.getTime() - 1209600000);  // subtract two weeks
   const end = now;
   const within_range = sessions.filtered("timestamp > $0 AND timestamp < $1", start, end);
 
@@ -53,10 +45,24 @@ function AnalysisScreen(props) {
   const pu_count = new Map();
   const pi_count = new Map();
   const pu_hist = new Map();
-  for (let d = 1; d <= day_int; d++) {
-    const day = d.toString().padStart(2, '0');
-    pu_count.set(month + '/' + day,0);
-    pi_count.set(month + '/' + day,0);
+  let start_millis = start.getTime() + 86400000;
+
+  let first_week_label = "";
+  let second_week_label = "";
+  // populate map with keys for each day in the past 2 weeks
+  for (let d = 0; d < 14; d++) {
+    const day = new Date(start_millis);
+    const key = formatDate(day);
+    if (d == 0) {
+      first_week_label = key;
+    }
+    if (d == 7) {
+      second_week_label = key;
+    }
+
+    pu_count.set(key, 0);
+    pi_count.set(key, 0);
+    start_millis += 86400000;
   }
   for (let type = 1; type <= 7; type++) {
     pu_hist.set(type, 0);
@@ -94,11 +100,9 @@ function AnalysisScreen(props) {
   const pi_avg = arrAvg(pi_data).toFixed(2);
   const pu_avg = weekAvg(pu_data).toFixed(2);
 
-  // TODO: stop hard-coding these x-axis labels
-  //-----------------vvvvvvv
   const screenWidth = Dimensions.get("window").width;
   const piData = {
-    labels: ["03-01", "03-07"],
+    labels: [first_week_label, second_week_label],
     datasets: [
       {
         data: pi_data,
@@ -108,7 +112,7 @@ function AnalysisScreen(props) {
     ],
   };
   const puData = {
-    labels: ["03-01", "03-07"],
+    labels: [first_week_label, second_week_label],
     datasets: [
       {
         data: pu_data,
