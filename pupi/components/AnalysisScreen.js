@@ -162,9 +162,63 @@ function AnalysisScreen(props) {
     decimalPlaces: 1, // optional, defaults to 2dp
     barPercentage: 0.7,
   };
-  // ^^^^^^^^^
 
+  const constipation_quip = "You tend to have more constipation-form stools! \
+  Check that you're drinking enough liquids, or eating enough food and/or fiber.";
 
+  let diarrhea_count = pu_hist_data[6] + pu_hist_data[5];
+  const diarrhea_quip = `You've had diarrhea ${diarrhea_count} time(s) recently. ` + 
+    "Be sure to replenish your hydration. Contact your healthcare provider " +
+    "if it becomes more severe or frequent or if you develop symptoms like fever, vomiting, or black tarry stools.";
+
+  const normal_quip = "The middle section of stool forms is most frequent, \
+   which means you've been having normal stool. Congratulations!";
+
+  const constipation_count = pu_hist_data[0] + pu_hist_data[1];
+  const normal_count = pu_hist_data.reduce((a,b) => a + b, 0) - constipation_count - diarrhea_count;
+
+  let histogram_quip = "";
+  if (diarrhea_count > 0) {
+    histogram_quip = diarrhea_quip;
+  } else if (normal_count > constipation_count) {
+    histogram_quip = normal_quip;
+  } else {
+    histogram_quip = constipation_quip;
+  }
+
+  const avg_pu_freq_quip = `On average, you're defecating ${pu_avg} times a week. `;
+  const lo_pu_freq_quip =  "This is on the lower end ";
+  const mid_pu_freq_quip = "This is toward the middle ";
+  const hi_pu_freq_quip = "This is on the upper end ";
+
+  const very_lo_pu_freq_quip = "This is a low amount; are you eating enough, or perhaps forgetting to fill in our forms?";
+
+  const tail_pu_freq_quip = "of the normal range for pu frequency (which is between 3 times a week to 3 times a day).";
+
+  let pu_freq_quip = avg_pu_freq_quip;
+  if (pu_avg < 3) {
+    pu_freq_quip += very_lo_pu_freq_quip;
+  } else if (pu_avg < 8) {
+    pu_freq_quip += lo_pu_freq_quip + tail_pu_freq_quip;
+  } else if (pu_avg < 15) {
+    pu_freq_quip += mid_pu_freq_quip + tail_pu_freq_quip;
+  } else {
+    pu_freq_quip += hi_pu_freq_quip + tail_pu_freq_quip;
+  }
+
+  const avg_pi_freq_quip = `On average, you're urinating ${pi_avg} times a day. `;
+  const lo_pi_freq_quip = "The normal amount is 6-7 times per day. Are you drinking enough liquids?";
+  const normal_pi_freq_quip = "This is around the normal frequency of 6-7 times a day.";
+  const hi_pi_freq_quip = "Most people urinate 6-7 times a day, but you seem extra hydrated, well done!";
+  let pi_freq_quip = avg_pi_freq_quip;
+
+  if (pi_avg < 4.5) {
+    pi_freq_quip += lo_pi_freq_quip;
+  } else if (pi_avg < 8.5) {
+    pi_freq_quip += normal_pi_freq_quip;
+  } else {
+    pi_freq_quip += hi_pi_freq_quip;
+  }
   return (
     <SafeAreaView>
       <ScrollView
@@ -174,8 +228,7 @@ function AnalysisScreen(props) {
             <Text style={styles.titleText}>Histogram of Bristol Stool Types in the Past 2 Weeks</Text>
           </View>
           <View style={styles.item}>
-            <Text style={styles.descText}>You tend to have more constipation-form stools!
-            Check that you're drinking enough liquids and/or eating enough fiber.</Text>
+            <Text style={styles.descText}>{histogram_quip}</Text>
           </View>
           <BarChart
             data={puHistData}
@@ -195,8 +248,7 @@ function AnalysisScreen(props) {
             <Text style={styles.titleText}>Count of Daily Pu in the Past 2 Weeks</Text>
           </View>
           <View style={styles.item}>
-            <Text style={styles.descText}>On average, you're defecating {pu_avg} times a week. 
-            This is on the lower end of the normal range for pu frequency (which is between 3 times a week to 3 times a day).</Text>
+            <Text style={styles.descText}>{pu_freq_quip}</Text>
           </View>
           <LineChart
             data={puData}
@@ -213,8 +265,7 @@ function AnalysisScreen(props) {
             <Text style={styles.titleText}>Count of Daily Pi in the Past 2 Weeks</Text>
           </View>
           <View style={styles.item}>
-            <Text style={styles.descText}>On average, you're only urinating {pi_avg} times a day.
-             The normal amount is 6-7 times per day. Are you drinking enough liquids?</Text>
+            <Text style={styles.descText}>{pi_freq_quip}</Text>
           </View>
           <LineChart
             data={piData}
