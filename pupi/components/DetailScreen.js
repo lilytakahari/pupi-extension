@@ -39,7 +39,7 @@ there are infinitely many things wrong with how i am using the agenda / the agen
 */
 // Notes: the key in the items dictionary must be the YYYY-MM-DD string, 
 // but parameters requiring just one date can accept Javascript Date object
-function DetailScreen(props) {
+function DetailScreen({navigation}) {
   const [agendaItems, setAgendaItems] = useState({});
   const realm = useRealm();
   const sessions = useQuery(Session);
@@ -120,7 +120,8 @@ function DetailScreen(props) {
             items={agendaItems}
             onDayPress={loadMonth}
             renderItem={(item, isFirst) => (
-              <TouchableOpacity style={item.type=='pu'?(styles.pu_entry):(styles.pi_entry)}>
+              <TouchableOpacity onPress={() => navigation.navigate('Session Details')}
+                style={item.type=='pu'?(styles.pu_entry):(styles.pi_entry)}>
                 <Image
                     source={IconSource(item)}
                     style={styles.entry_img}
