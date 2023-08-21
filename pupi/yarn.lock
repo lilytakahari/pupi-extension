@@ -2929,7 +2929,7 @@ depd@2.0.0:
   resolved "https://registry.npmjs.org/depd/-/depd-2.0.0.tgz"
   integrity sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==
 
-deprecated-react-native-prop-types@4.1.0:
+deprecated-react-native-prop-types@^4.0.0, deprecated-react-native-prop-types@4.1.0:
   version "4.1.0"
   resolved "https://registry.npmjs.org/deprecated-react-native-prop-types/-/deprecated-react-native-prop-types-4.1.0.tgz"
   integrity sha512-WfepZHmRbbdTvhcolb8aOKEvQdcmTMn5tKLbqbXmkBvjFjRVWAYqsXk/DBsV8TZxws8SdGHLuHaJrHSQUPRdfw==
@@ -5937,7 +5937,7 @@ prompts@^2.0.1, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@*, prop-types@^15.5.10, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@*, prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -6153,6 +6153,13 @@ react-native-swipe-gestures@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.5.tgz"
   integrity sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==
+
+react-native-tag-select@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/react-native-tag-select/-/react-native-tag-select-2.0.0.tgz"
+  integrity sha512-ys0A2MKZ8CLQ6QYBnnuyg1/MIsNVmRSSJpPFD3E+tTR4FTaLYNRiTIaBy1Wy77feBaYeDfN7UG2K5jr31+Iq0A==
+  dependencies:
+    prop-types "^15.6.0"
 
 react-native-vector-icons@^9.*, react-native-vector-icons@^9.2.0:
   version "9.2.0"

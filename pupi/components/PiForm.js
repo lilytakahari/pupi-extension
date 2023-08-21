@@ -7,10 +7,14 @@ import {
     StyleSheet,
     Image,
     Dimensions,
+    Alert,
+    SafeAreaView,
+    ScrollView
   } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import NumericInput from 'react-native-numeric-input';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { TagSelect } from 'react-native-tag-select';
 
 import {Session} from '../models/Session';
 import {SessionRealmContext} from '../models';
@@ -25,23 +29,38 @@ const windowWidth = Dimensions.get('window').width;
 // TODO: Change the format according to light mode and dark mode
 // under dark mode, Date Picker's text color will be white, which make it hard to read
 
-function PiForm(props) {
+function PiForm({route, navigation}) {
+    const { sessionId } = route.params;
+    let updateSession = false;
+    let sessionData = {};
+    if (sessionId != "") {
+        updateSession = true;
+        sessionData = useObject(Session, Realm.BSON.ObjectID(sessionId));
+    }
+
     const realm = useRealm();
     
-
+    const [tags, setTags] = useState([]);
     //datetimepicker
-    const [date, setDate] = useState(new Date())
+    const [date, setDate] = useState(updateSession?(sessionData.timestamp):(new Date()));
 
     // duration
-    const [DurationValue, setDurationValue] = useState(5);
+    const [DurationValue, setDurationValue] = useState(updateSession?(sessionData.duration):(1));
 
     //dropdownpicker
     const [ShapeOpen, setShapeOpen] = useState(false);
     const onShapeOpen = () => {setColorOpen(false);};
 
+    const pi_color_reverse_map = {
+      'Brown' : 'pi_color1',
+      'Dark Yellow' : 'pi_color2',
+      'Yellow' : 'pi_color3',
+      'Light Yellow' : 'pi_color4',
+      'Transparent' : 'pi_color5',
+  };
     const [ColorOpen, setColorOpen] = useState(false);
     const onColorOpen = () => {setShapeOpen(false);};
-    const [ColorValue, setColorValue] = useState('pi_color4');
+    const [ColorValue, setColorValue] = useState(updateSession?(pi_color_reverse_map[sessionData.color]):'pi_color4');
     const [ColorItems, setColorItems] = useState([
         {label: 'Brown', value: 'pi_color1',
          icon: () => (<Image source={require('../assets/dropdownIcon/pi_color1.png')} style={styles.dropdownIcon}/>),},
@@ -60,38 +79,63 @@ function PiForm(props) {
         'pi_color3': 'Yellow',
         'pi_color4': 'Light Yellow',
         'pi_color5': 'Transparent',
-    }
+    };
+    
 
     //textinput
-    const [TextValue, onChangeText] = useState('');
+    const [TextValue, onChangeText] = useState(updateSession?sessionData.notes:'');
 
     // Submit
     // Handle the value passing here
     const handleSubmit = (event) => {
+      Alert.alert('Selected tags', `${JSON.stringify(this.tag.itemsSelected)}`);
         //alert(TextValue);
         event.preventDefault();
-        props.navigation.navigate('Home')
+        navigation.navigate('Home');
         // insert Realm usage here
         const new_form = {
+            _id: updateSession?(Realm.BSON.ObjectId(sessionId)):(new Realm.BSON.ObjectId()),
             pupi_type: 'pi',
             timestamp: date,
             duration: DurationValue,
             color: pi_color_map[ColorValue],
             notes: TextValue,
-        }
+        };
         realm.write(() => {
-            return new Session(realm, new_form);
-        });
+          realm.create(
+              'Session', 
+              new_form,
+              'modified',
+          );}
+        );
 
     }
 
+    const tag_list = [
+      { id: 1, name: 'Low hydration' },
+      { id: 2, name: 'Good hydration' },
+      { id: 3, name: 'High fiber' },
+      { id: 4, name: 'Low fiber' },
+      { id: 5, name: 'Menstruation' },
+    ];
+
+    
+
     return (
-        <View>
+        <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.scrollView}>
             <View>
             <Text style={styles.titleText}>Time</Text>
             <DatePicker date={date} onDateChange={setDate} style={styles.datepickerStye}/>
             </View>
 
+            <TagSelect
+              data={tag_list}
+              labelAttr="name"
+              ref={(tag) => {
+                this.tag = tag;
+              }}
+            />
             <View>
             <Text style={styles.titleText}>Duration</Text>
                 <View style={styles.numericInputStyle}>
@@ -137,13 +181,20 @@ function PiForm(props) {
             <View>
             <Button title="Submit" color='#00bef8' onPress={handleSubmit} style={styles.btn}/>
             </View>
-        </View>
+        </ScrollView>
+        </SafeAreaView>
     );
 }
 
 export default PiForm;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollView: {
+    margin: 5,
+  },
   titleText: {
     fontSize: 20,
   },

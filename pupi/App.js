@@ -134,13 +134,13 @@ export default function App() {
                 headerTitle: (props) => <LogoTitle {...props} />,
                 headerRight: () => (
                   <View style={{ flexDirection:"row" }}>
-                  <TouchableOpacity onPress={() => navigation.navigate('Pi')}>
+                  <TouchableOpacity onPress={() => navigation.navigate('Pi', {sessionId: ""})}>
                       <Image
                         source={require('./assets/drop.png')}
                                 style={styles.headerIcon}
                       />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigation.navigate('Pu')}>
+                  <TouchableOpacity onPress={() => navigation.navigate('Pu', {sessionId: ""})}>
                       <Image
                         source={require('./assets/poop.png')}
                         style={styles.headerIcon}

@@ -45,14 +45,14 @@ function DetailScreen({navigation}) {
   const sessions = useQuery(Session);
   
   // TODO for future: you need to figure a way around this
-  useEffect(() => {
-      const cal_obj = {
-        timestamp: (new Date()).getTime(),
-        month: 3,
-        year: 2023,
-      };
-      loadMonth(cal_obj);
-    }, [sessions]);
+  // useEffect(() => {
+  //     const cal_obj = {
+  //       timestamp: (new Date()).getTime(),
+  //       month: 3,
+  //       year: 2023,
+  //     };
+  //     loadMonth(cal_obj);
+  //   }, [sessions]);
 
   function loadMonth(calendar_obj) {
     
@@ -77,6 +77,7 @@ function DetailScreen({navigation}) {
       const key = formatDate(within_range[i]['timestamp']);
       if (key in items) {
         items[key].push({
+          id: within_range[i]['_id'].toString(),
           start: formatTime(within_range[i]['timestamp']),
           duration: within_range[i]['duration'],
           shape: within_range[i]['stool_shape'],
@@ -86,6 +87,14 @@ function DetailScreen({navigation}) {
     }
     console.log('update items');
     setAgendaItems(items);
+  }
+
+  function navigate_forms(item) {
+    if (item.type == 'pu') {
+      navigation.navigate('Pu', {sessionId: item.id});
+    } else {
+      navigation.navigate('Pi', {sessionId: item.id});
+    }
   }
 
   function IconSource(item) {
@@ -120,7 +129,7 @@ function DetailScreen({navigation}) {
             items={agendaItems}
             onDayPress={loadMonth}
             renderItem={(item, isFirst) => (
-              <TouchableOpacity onPress={() => navigation.navigate('Session Details')}
+              <TouchableOpacity onPress={() => navigate_forms(item)}
                 style={item.type=='pu'?(styles.pu_entry):(styles.pi_entry)}>
                 <Image
                     source={IconSource(item)}

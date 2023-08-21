@@ -7,11 +7,16 @@ import {
     StyleSheet,
     Image,
     Dimensions,
+    Alert,
+    SafeAreaView,
+    ScrollView
   } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import NumericInput from 'react-native-numeric-input';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { TagSelect } from 'react-native-tag-select';
 
+import {Realm} from '@realm/react';
 import {Session} from '../models/Session';
 import {SessionRealmContext} from '../models';
 
@@ -26,19 +31,28 @@ const windowWidth = Dimensions.get('window').width;
 // TODO: Change the format according to light mode and dark mode
 // under dark mode, Date Picker's text color will be white, which make it hard to read
 // TODO: The icons I used for stool shape are modified from the internet. I recommend redrawing them by yourself.
-function PuForm(props) {
+function PuForm({route, navigation}) {
+    const { sessionId } = route.params;
+    let updateSession = false;
+    let sessionData = {};
+    if (sessionId != "") {
+        updateSession = true;
+        sessionData = useObject(Session, Realm.BSON.ObjectID(sessionId));
+    }
+    
+
     const realm = useRealm();
 
     //datetimepicker
-    const [date, setDate] = useState(new Date())
+    const [date, setDate] = useState(updateSession?(sessionData.timestamp):(new Date()));
 
     // duration
-    const [DurationValue, setDurationValue] = useState(5);
+    const [DurationValue, setDurationValue] = useState(updateSession?(sessionData.duration):(5));
 
     //dropdownpicker
     const [ShapeOpen, setShapeOpen] = useState(false);
     const onShapeOpen = () => {setColorOpen(false);};
-    const [ShapeValue, setShapeValue] = useState('pu_shape3');
+    const [ShapeValue, setShapeValue] = useState(updateSession?('pu_shape' + sessionData.stool_shape):('pu_shape3'));
     const [ShapeItems, setShapeItems] = useState([
         {label: 'Constipation Stool: Separate hard lumps', value: 'pu_shape1',
          icon: () => (<Image source={require('../assets/dropdownIcon/pu_shape1.png')} style={styles.dropdownIcon}/>)},
@@ -64,10 +78,18 @@ function PuForm(props) {
         'pu_shape6': 6,
         'pu_shape7': 7,
     }
+    const pu_color_reverse_map = {
+        'Black': 'pu_color1',
+        'Brown': 'pu_color2',
+        'Light Brown': 'pu_color3',
+        'Red': 'pu_color4',
+        'Green': 'pu_color5',
+        'Yellow': 'pu_color6',
+    }
 
     const [ColorOpen, setColorOpen] = useState(false);
     const onColorOpen = () => {setShapeOpen(false);};
-    const [ColorValue, setColorValue] = useState('pu_color2');
+    const [ColorValue, setColorValue] = useState(updateSession?(pu_color_reverse_map[sessionData.color]):('pu_color2'));
     const [ColorItems, setColorItems] = useState([
         {label: 'Black', value: 'pu_color1',
          icon: () => (<Image source={require('../assets/dropdownIcon/pu_color1.png')} style={styles.dropdownIcon}/>),},
@@ -90,38 +112,64 @@ function PuForm(props) {
         'pu_color5': 'Green',
         'pu_color6': 'Yellow',
     }
+    
 
     //textinput
-    const [TextValue, onChangeText] = useState('');
+    const [TextValue, onChangeText] = useState(updateSession?sessionData.notes:'');
 
     // Submit
     // Handle the value passing here
     const handleSubmit = (event) => {
         //alert(TextValue);
+        Alert.alert('Selected tags', `${JSON.stringify(this.tag.itemsSelected)}`);
         event.preventDefault();
-        props.navigation.navigate('Home')
+        navigation.navigate('Home');
         // insert Realm usage here
         const new_form = {
+            _id: updateSession?(Realm.BSON.ObjectId(sessionId)):(new Realm.BSON.ObjectId()),
             pupi_type: 'pu',
             timestamp: date,
             duration: DurationValue,
             stool_shape: pu_shape_map[ShapeValue],
             color: pu_color_map[ColorValue],
             notes: TextValue,
-        }
+        };
         realm.write(() => {
-            return new Session(realm, new_form);
-        });
+            realm.create(
+                'Session', 
+                new_form,
+                'modified',
+            );}
+        );
+        // realm.write(() => {
+        //     return new Session(realm, new_form);
+        // });
 
     }
 
+    const tag_list = [
+        { id: 1, name: 'Low hydration' },
+        { id: 2, name: 'Good hydration' },
+        { id: 3, name: 'High fiber' },
+        { id: 4, name: 'Low fiber' },
+        { id: 5, name: 'Menstruation' },
+    ];
+
     return (
-        <View>
+        <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.scrollView}>
             <View>
             <Text style={styles.titleText}>Time</Text>
             <DatePicker date={date} onDateChange={setDate} style={styles.datepickerStye}/>
             </View>
 
+            <TagSelect
+              data={tag_list}
+              labelAttr="name"
+              ref={(tag) => {
+                this.tag = tag;
+              }}
+            />
             <View>
             <Text style={styles.titleText}>Duration</Text>
                 <View style={styles.numericInputStyle}>
@@ -182,13 +230,20 @@ function PuForm(props) {
             <View>
             <Button title="Submit" color='#00bef8' onPress={handleSubmit}  style={styles.btn}/>
             </View>
-        </View>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
 export default PuForm;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollView: {
+    margin: 5,
+  },
   titleText: {
     fontSize: 20,
   },
