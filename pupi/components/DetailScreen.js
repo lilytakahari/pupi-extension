@@ -45,14 +45,15 @@ function DetailScreen({navigation}) {
   const sessions = useQuery(Session);
   
   // TODO for future: you need to figure a way around this
-  // useEffect(() => {
-  //     const cal_obj = {
-  //       timestamp: (new Date()).getTime(),
-  //       month: 3,
-  //       year: 2023,
-  //     };
-  //     loadMonth(cal_obj);
-  //   }, [sessions]);
+  useEffect(() => {
+      const now = new Date();
+      const cal_obj = {
+        timestamp: now.getTime(),
+        month: now.getMonth()+1,
+        year: now.getFullYear(),
+      };
+      loadMonth(cal_obj);
+    }, []);
 
   function loadMonth(calendar_obj) {
     

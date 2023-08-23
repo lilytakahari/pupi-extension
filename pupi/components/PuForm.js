@@ -18,6 +18,7 @@ import { TagSelect } from 'react-native-tag-select';
 
 import {Realm} from '@realm/react';
 import {Session} from '../models/Session';
+import {Tag} from '../models/Tag';
 import {SessionRealmContext} from '../models';
 
 const {useRealm, useQuery, useObject} = SessionRealmContext;
@@ -133,6 +134,7 @@ function PuForm({route, navigation}) {
             stool_shape: pu_shape_map[ShapeValue],
             color: pu_color_map[ColorValue],
             notes: TextValue,
+            tags: this.tag.itemsSelected,
         };
         realm.write(() => {
             realm.create(
@@ -147,13 +149,17 @@ function PuForm({route, navigation}) {
 
     }
 
-    const tag_list = [
-        { id: 1, name: 'Low hydration' },
-        { id: 2, name: 'Good hydration' },
-        { id: 3, name: 'High fiber' },
-        { id: 4, name: 'Low fiber' },
-        { id: 5, name: 'Menstruation' },
-    ];
+    // const tag_list = [
+    //     { id: 1, name: 'Low hydration' },
+    //     { id: 2, name: 'Good hydration' },
+    //     { id: 3, name: 'High fiber' },
+    //     { id: 4, name: 'Low fiber' },
+    //     { id: 5, name: 'Menstruation' },
+    // ];
+    const tag_list = useQuery(Tag);
+    console.log(tag_list);
+
+    const selected = updateSession?(sessionData.tags):([]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -165,7 +171,9 @@ function PuForm({route, navigation}) {
 
             <TagSelect
               data={tag_list}
+              value={selected}
               labelAttr="name"
+              keyAttr="_id"
               ref={(tag) => {
                 this.tag = tag;
               }}

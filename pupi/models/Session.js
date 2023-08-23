@@ -19,6 +19,7 @@ export class Session extends Realm.Object {
         volume: {type: 'string', default: ''},
         notes: {type: 'string', default: ''},
         imagepath: {type: 'string', default: ''},
+        tags: {type: 'Tag[]', default: []},
     },
   };
 }

@@ -42,6 +42,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {Session} from './models/Session';
+import {Tag} from './models/Tag';
 import {SessionRealmContext} from './models';
 
 const {useRealm, useQuery, useObject} = SessionRealmContext;
@@ -120,6 +121,12 @@ export default function App() {
         return new Session(realm, demo_data[i]);
       });
     }
+    realm.write(() => {
+      return new Tag(realm, {name: 'Menstruation'});
+    });
+    realm.write(() => {
+      return new Tag(realm, {name: 'Good hydration'});
+    });
     console.log(demo_data.length)
   }, []);
   
