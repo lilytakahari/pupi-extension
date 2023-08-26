@@ -16,6 +16,7 @@ import NumericInput from 'react-native-numeric-input';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { TagSelect } from 'react-native-tag-select';
 
+
 import {Realm} from '@realm/react';
 import {Session} from '../models/Session';
 import {Tag} from '../models/Tag';
@@ -122,7 +123,7 @@ function PuForm({route, navigation}) {
     // Handle the value passing here
     const handleSubmit = (event) => {
         //alert(TextValue);
-        Alert.alert('Selected tags', `${JSON.stringify(this.tag.itemsSelected)}`);
+        Alert.alert('Success');
         event.preventDefault();
         navigation.navigate('Home');
         // insert Realm usage here
@@ -143,23 +144,13 @@ function PuForm({route, navigation}) {
                 'modified',
             );}
         );
-        // realm.write(() => {
-        //     return new Session(realm, new_form);
-        // });
 
     }
 
-    // const tag_list = [
-    //     { id: 1, name: 'Low hydration' },
-    //     { id: 2, name: 'Good hydration' },
-    //     { id: 3, name: 'High fiber' },
-    //     { id: 4, name: 'Low fiber' },
-    //     { id: 5, name: 'Menstruation' },
-    // ];
     const tag_list = useQuery(Tag);
-    console.log(tag_list);
+    const tag_array = Array.from(tag_list);
 
-    const selected = updateSession?(sessionData.tags):([]);
+    const selected = updateSession?(Array.from(sessionData.tags)):([]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -170,7 +161,7 @@ function PuForm({route, navigation}) {
             </View>
 
             <TagSelect
-              data={tag_list}
+              data={tag_array}
               value={selected}
               labelAttr="name"
               keyAttr="_id"

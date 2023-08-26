@@ -9,7 +9,10 @@ import { useState, useEffect} from 'react';
 import { View, Image } from 'react-native';
 // Calendar
 import {Agenda} from 'react-native-calendars';
+import DropDownPicker from 'react-native-dropdown-picker';
+
 import {Session} from '../models/Session';
+import {Tag} from '../models/Tag';
 import {SessionRealmContext} from '../models';
 
 const {useRealm, useQuery, useObject} = SessionRealmContext;
@@ -40,9 +43,25 @@ there are infinitely many things wrong with how i am using the agenda / the agen
 // Notes: the key in the items dictionary must be the YYYY-MM-DD string, 
 // but parameters requiring just one date can accept Javascript Date object
 function DetailScreen({navigation}) {
-  const [agendaItems, setAgendaItems] = useState({});
   const realm = useRealm();
+
+  const tags = useQuery(Tag);
+  const [open, setOpen] = useState(false);
+  const [chosen_tag, setValue] = useState('');
+  const [tag_options, setItems] = useState(tags);
+
+  // Credit: https://stackoverflow.com/a/72615754
+  const selectValue = (currentValue) => {
+    let chosenValue = typeof currentValue === 'function' ? currentValue() : currentValue;
+    if (chosenValue === chosen_tag) {
+        setValue('');
+    } else {
+        setValue(currentValue);
+    }
+  };
+
   const sessions = useQuery(Session);
+  const [agendaItems, setAgendaItems] = useState({});
   
   // TODO for future: you need to figure a way around this
   useEffect(() => {
@@ -54,9 +73,18 @@ function DetailScreen({navigation}) {
       };
       loadMonth(cal_obj);
     }, []);
+  useEffect(() => {
+    const now = new Date();
+    const cal_obj = {
+      timestamp: now.getTime(),
+      month: now.getMonth()+1,
+      year: now.getFullYear(),
+    };
+    loadMonth(cal_obj);
+  }, [sessions, chosen_tag]);
 
   function loadMonth(calendar_obj) {
-    
+    console.log(chosen_tag);
     const items = {};
     const utc_timestamp = calendar_obj.timestamp;
     const month = calendar_obj.month.toString().padStart(2, '0');
@@ -68,11 +96,13 @@ function DetailScreen({navigation}) {
     const start = new Date(utc_timestamp - 2629800000);  // subtract one month
     const end = new Date(utc_timestamp + 2629800000); // add one month
 
-    // TODO FUTURE: no filtering, in case it doesn't work
-    // const within_range = sessions.filtered("timestamp > $0 AND timestamp < $1", start, end);
-    
-    // added sorting
-    const within_range = sessions.sorted("timestamp");
+    let within_range = [];
+    if (chosen_tag == "") {
+      within_range = sessions.filtered("timestamp > $0 AND timestamp < $1", start, end).sorted("timestamp");
+    } else {
+      const tag_object = tags.filtered("name == $0", chosen_tag);
+      within_range = tag_object[0]['rel_sessions'].filtered("timestamp > $0 AND timestamp < $1", start, end).sorted("timestamp");
+    }
 
     for (let i = 0; i < within_range.length; i++) {
       const key = formatDate(within_range[i]['timestamp']);
@@ -122,9 +152,23 @@ function DetailScreen({navigation}) {
     }
   }
 
+
   //<Text style={styles.itemText}>Type{item.type=='pu'?(' '+ item.shape):''} {item.type}</Text>
   return (
     <SafeAreaView style={styles.container}>
+          <DropDownPicker
+          open={open}
+          value={chosen_tag}
+          items={tag_options}
+          setOpen={setOpen}
+          setValue={selectValue}
+          setItems={setItems}
+          schema={{
+            label: 'name',
+            value: 'name',
+          }}
+          placeholder="Filter entries by tag"
+        />
           <Agenda
             selected={new Date()}
             items={agendaItems}

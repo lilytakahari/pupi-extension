@@ -90,7 +90,7 @@ function PiForm({route, navigation}) {
     // Submit
     // Handle the value passing here
     const handleSubmit = (event) => {
-      Alert.alert('Selected tags', `${JSON.stringify(this.tag.itemsSelected)}`);
+        Alert.alert('Success');
         //alert(TextValue);
         event.preventDefault();
         navigation.navigate('Home');
@@ -116,9 +116,9 @@ function PiForm({route, navigation}) {
 
     
     const tag_list = useQuery(Tag);
-    console.log(tag_list);
+    const tag_array = Array.from(tag_list);
 
-    const selected = updateSession?(sessionData.tags):([]);
+    const selected = updateSession?(Array.from(sessionData.tags)):([]);
     
 
     return (
@@ -130,7 +130,7 @@ function PiForm({route, navigation}) {
             </View>
 
             <TagSelect
-              data={tag_list}
+              data={tag_array}
               value={selected}
               labelAttr="name"
               keyAttr="_id"

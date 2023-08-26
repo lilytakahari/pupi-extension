@@ -5,15 +5,19 @@ import {
   ScrollView,
   Dimensions,
   View,
+  TouchableOpacity,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useState, useEffect } from 'react';
 import {
   LineChart,
   BarChart,
 } from "react-native-chart-kit";
+import DropDownPicker from 'react-native-dropdown-picker';
 
 // Calendar
+import {Tag} from '../models/Tag';
 import {Session} from '../models/Session';
 import {SessionRealmContext} from '../models';
 
@@ -30,14 +34,37 @@ const formatDate = d => [
 ].join('/');
 
 function AnalysisScreen(props) {
+  const tags = useQuery(Tag);
+  const [open, setOpen] = useState(false);
+  const [chosen_tag, setValue] = useState('');
+  const [tag_options, setItems] = useState(tags);
+
+  // Credit: https://stackoverflow.com/a/72615754
+  const selectValue = (currentValue) => {
+    let chosenValue = typeof currentValue === 'function' ? currentValue() : currentValue;
+    if (chosenValue === chosen_tag) {
+        setValue('');
+    } else {
+        setValue(currentValue);
+    }
+  };
+
   // TODO: un-comment this line
   const now = new Date();
+
   // const now = new Date('2023-03-14T08:20');
   const sessions = useQuery(Session);
 
   const start = new Date(now.getTime() - 1209600000);  // subtract two weeks
   const end = now;
-  const within_range = sessions.filtered("timestamp > $0 AND timestamp < $1", start, end);
+  
+  let within_range = [];
+  if (chosen_tag == "") {
+    within_range = sessions.filtered("timestamp > $0 AND timestamp < $1", start, end);
+  } else {
+    const tag_object = tags.filtered("name == $0", chosen_tag);
+    within_range = tag_object[0]['rel_sessions'].filtered("timestamp > $0 AND timestamp < $1", start, end);
+  }
 
   const month = (now.getMonth()+1).toString().padStart(2, '0');
   const day_int = now.getDate();
@@ -220,7 +247,20 @@ function AnalysisScreen(props) {
     pi_freq_quip += hi_pi_freq_quip;
   }
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1}}>
+      <DropDownPicker
+          open={open}
+          value={chosen_tag}
+          items={tag_options}
+          setOpen={setOpen}
+          setValue={selectValue}
+          setItems={setItems}
+          schema={{
+            label: 'name',
+            value: 'name',
+          }}
+          placeholder="Filter entries by tag"
+        />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic">
           
@@ -279,6 +319,12 @@ function AnalysisScreen(props) {
           />
 
       </ScrollView>
+      <View style={styles.floatingButtonContainer}>
+        <TouchableOpacity style={styles.floatingButton}>
+        <Ionicons name="layers-outline"  color={"white"} size={20} />
+          <Text style={styles.buttonText}>Compare Tags</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -303,5 +349,24 @@ const styles = StyleSheet.create({
   descText: {
     color: '#888',
     fontSize: 14,
+  },
+  floatingButtonContainer: {
+    position: 'absolute',
+    bottom: 16, 
+    alignSelf: 'center', 
+  },
+  floatingButton: {
+    flexDirection: 'row',
+    backgroundColor: '#00bef8',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 50,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 8,
   },
 });

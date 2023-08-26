@@ -43,6 +43,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {Session} from './models/Session';
 import {Tag} from './models/Tag';
+import { Setup } from './models/Setup';
 import {SessionRealmContext} from './models';
 
 const {useRealm, useQuery, useObject} = SessionRealmContext;
@@ -111,23 +112,38 @@ const Stack = createNativeStackNavigator();
  */
 export default function App() {
   const realm = useRealm();
+  const did_setup = useQuery(Setup);
   useEffect(() => {
-    
-  
-    const demo_data = require('./assets/pupi_demo_data.json')
-    for (i = 0; i < demo_data.length; i++) {
-      
+    if (did_setup.length == 0) {
+      const demo_data = require('./assets/pupi_demo_data.json')
+      for (i = 0; i < demo_data.length; i++) {
+        
+        realm.write(() => {
+          return new Session(realm, demo_data[i]);
+        });
+      }
       realm.write(() => {
-        return new Session(realm, demo_data[i]);
+        return new Tag(realm, {name: 'Good hydration'});
+      });
+      realm.write(() => {
+        return new Tag(realm, {name: 'Low hydration'});
+      });
+      realm.write(() => {
+        return new Tag(realm, {name: 'High fiber'});
+      });
+      realm.write(() => {
+        return new Tag(realm, {name: 'Low fiber'});
+      });
+      realm.write(() => {
+        return new Tag(realm, {name: 'Menstruation'});
+      });
+      // register that we have setup to Realm
+      realm.write(() => {
+        return new Setup(realm, {});
       });
     }
-    realm.write(() => {
-      return new Tag(realm, {name: 'Menstruation'});
-    });
-    realm.write(() => {
-      return new Tag(realm, {name: 'Good hydration'});
-    });
-    console.log(demo_data.length)
+    console.log("setup?");
+    console.log(did_setup);
   }, []);
   
   return (
