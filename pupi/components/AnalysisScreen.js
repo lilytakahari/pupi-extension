@@ -16,7 +16,6 @@ import {
 } from "react-native-chart-kit";
 import DropDownPicker from 'react-native-dropdown-picker';
 
-// Calendar
 import {Tag} from '../models/Tag';
 import {Session} from '../models/Session';
 import {SessionRealmContext} from '../models';
@@ -33,7 +32,7 @@ const formatDate = d => [
   d.getDate().toString().padStart(2, '0')
 ].join('/');
 
-function AnalysisScreen(props) {
+function AnalysisScreen({route, navigation}) {
   const tags = useQuery(Tag);
   const [open, setOpen] = useState(false);
   const [chosen_tag, setValue] = useState('');
@@ -66,13 +65,10 @@ function AnalysisScreen(props) {
     within_range = tag_object[0]['rel_sessions'].filtered("timestamp > $0 AND timestamp < $1", start, end);
   }
 
-  const month = (now.getMonth()+1).toString().padStart(2, '0');
-  const day_int = now.getDate();
-
   const pu_count = new Map();
   const pi_count = new Map();
   const pu_hist = new Map();
-  let start_millis = start.getTime() + 86400000;
+  let start_millis = start.getTime() + 86400000; // add 24 hours
 
   let first_week_label = "";
   let second_week_label = "";
@@ -314,13 +310,14 @@ function AnalysisScreen(props) {
             chartConfig={piChartConfig}
             style={{
               borderRadius: 20,
+              paddingBottom: 40,
             }}
             fromZero={true}
           />
 
       </ScrollView>
       <View style={styles.floatingButtonContainer}>
-        <TouchableOpacity style={styles.floatingButton}>
+        <TouchableOpacity style={styles.floatingButton} onPress={() => navigation.navigate('Comparison')}>
         <Ionicons name="layers-outline"  color={"white"} size={20} />
           <Text style={styles.buttonText}>Compare Tags</Text>
         </TouchableOpacity>

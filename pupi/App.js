@@ -9,7 +9,7 @@ import DetailScreen from './components/DetailScreen';
 import AnalysisScreen from './components/AnalysisScreen';
 import PuForm from './components/PuForm';
 import PiForm from './components/PiForm';
-import SessionDetails from './components/SessionDetails';
+import ComparisonCharts from './components/ComparisonCharts';
 
 import React, { useState, useEffect } from 'react';
 
@@ -177,7 +177,7 @@ export default function App() {
           <Stack.Group screenOptions={{ presentation: 'modal', headerTitle: false, }}>
             <Stack.Screen name="Pu" component={PuForm} />
             <Stack.Screen name="Pi" component={PiForm} />
-            <Stack.Screen name="Session Details" component={SessionDetails} />
+            <Stack.Screen name="Comparison" component={ComparisonCharts} />
           </Stack.Group>
           </Stack.Navigator>
         </NavigationContainer>
