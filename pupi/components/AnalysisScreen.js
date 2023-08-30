@@ -161,7 +161,7 @@ function AnalysisScreen({route, navigation}) {
     decimalPlaces: 1, // optional, defaults to 2dp
     labelColor: (opacity = 1) => `rgba(100, 100, 100, ${opacity})`,
     propsForBackgroundLines: {
-      stroke: '#DDDDDD',
+      stroke: '#ECECEC',
     },
   };
   const puChartConfig = {
@@ -258,62 +258,55 @@ function AnalysisScreen({route, navigation}) {
           placeholder="Filter entries by tag"
         />
       <ScrollView
-        contentInsetAdjustmentBehavior="automatic">
+        contentInsetAdjustmentBehavior="automatic"
+        style={{padding: 10}}>
           
           <View style={styles.item}>
-            <Text style={styles.titleText}>Histogram of Bristol Stool Types in the Past 2 Weeks</Text>
-          </View>
-          <View style={styles.item}>
+            <Text style={styles.titleText}>Histogram of Pu Shapes in the Past 2 Weeks</Text>
             <Text style={styles.descText}>{histogram_quip}</Text>
+            <BarChart
+              data={puHistData}
+              width={screenWidth-50}
+              height={200}
+              chartConfig={puHistChartConfig}
+              style={{
+                paddingRight: 40,
+              }}
+              fromZero={true}
+              showValuesOnTopOfBars={true}
+              withInnerLines={false}
+            />
           </View>
-          <BarChart
-            data={puHistData}
-            width={screenWidth}
-            height={200}
-            chartConfig={puHistChartConfig}
-            style={{
-              borderRadius: 20,
-              paddingRight: 50,
-              marginBottom: 30,
-            }}
-            fromZero={true}
-            showValuesOnTopOfBars={true}
-            withInnerLines={false}
-          />
           <View style={styles.item}>
             <Text style={styles.titleText}>Count of Daily Pu in the Past 2 Weeks</Text>
-          </View>
-          <View style={styles.item}>
             <Text style={styles.descText}>{pu_freq_quip}</Text>
+            <LineChart
+              data={puData}
+              width={screenWidth-30}
+              height={220}
+              chartConfig={puChartConfig}
+              style={{
+                paddingRight: 40,
+                marginRight: 10,
+              }}
+              fromZero={true}
+            />
           </View>
-          <LineChart
-            data={puData}
-            width={screenWidth}
-            height={220}
-            chartConfig={puChartConfig}
-            style={{
-              borderRadius: 20,
-              marginBottom: 30,
-            }}
-            fromZero={true}
-          />
-          <View style={styles.item}>
+          <View style={styles.lastItem}>
             <Text style={styles.titleText}>Count of Daily Pi in the Past 2 Weeks</Text>
-          </View>
-          <View style={styles.item}>
             <Text style={styles.descText}>{pi_freq_quip}</Text>
+            <LineChart
+              data={piData}
+              width={screenWidth-30}
+              height={220}
+              chartConfig={piChartConfig}
+              style={{
+                paddingRight: 40,
+                marginRight: 10,
+              }}
+              fromZero={true}
+            />
           </View>
-          <LineChart
-            data={piData}
-            width={screenWidth}
-            height={220}
-            chartConfig={piChartConfig}
-            style={{
-              borderRadius: 20,
-              paddingBottom: 40,
-            }}
-            fromZero={true}
-          />
 
       </ScrollView>
       <View style={styles.floatingButtonContainer}>
@@ -336,16 +329,26 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: 'white',
     flex: 1,
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 10,
+    marginBottom: 20
+  },
+  lastItem: {
+    backgroundColor: 'white',
+    flex: 1,
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 80
   },
   titleText: {
-    color: '#888',
+    color: 'black',
     fontSize: 16,
+    paddingVertical: 10,
   },
   descText: {
     color: '#888',
     fontSize: 14,
+    paddingBottom: 10,
   },
   floatingButtonContainer: {
     position: 'absolute',

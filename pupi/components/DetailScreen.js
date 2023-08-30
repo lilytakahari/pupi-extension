@@ -24,7 +24,14 @@ const formatDate = d => [
 ].join('-');
 
 function formatTime(date) {
-  return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? "pm" : "am";
+  const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+
+  const formattedDate = `${formattedHours}:${formattedMinutes} ${ampm}`;
+  return formattedDate;
 }
 /* DetailScreen()
  * Description: Shows detailed record of your pupi.
@@ -203,7 +210,7 @@ const styles = StyleSheet.create({
   pi_entry: {
     backgroundColor: '#fffbeb',
     flex: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 10,
     marginRight: 10,
     marginTop: 17,
@@ -213,7 +220,7 @@ const styles = StyleSheet.create({
   pu_entry: {
     backgroundColor: '#e6d9d3',
     flex: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 10,
     marginRight: 10,
     marginTop: 17,

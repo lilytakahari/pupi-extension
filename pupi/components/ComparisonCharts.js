@@ -220,57 +220,55 @@ function ComparisonCharts({route, navigation}) {
                     placeholder="Choose tag 2"
                 />
             </View>
-            <ScrollView>
+            
                 { ((value1 != "") && (value2 != "") && (value1 != value2)) ? // conditional
-                <>
+                <ScrollView style={{padding: 10}}>
                 <View style={styles.item}>
-                    <Text style={styles.titleText}>Histogram of Bristol Stool Types in the Past 2 Weeks</Text>
+                    <Text style={styles.titleText}>Histogram of Pu Shapes in the Past 2 Weeks</Text>
+                    <LineChart
+                        bezier
+                        data={puHistData}
+                        width={screenWidth-10}
+                        height={200}
+                        chartConfig={chartConfig}
+                        style={{
+                            paddingRight: 40,
+                            marginRight: 30,
+                        }}
+                    />
                 </View>
-                <LineChart
-                    bezier
-                    data={puHistData}
-                    width={screenWidth}
-                    height={200}
-                    chartConfig={chartConfig}
-                    style={{
-                        borderRadius: 20,
-                        marginBottom: 30,
-                    }}
-                />
                 <View style={styles.item}>
                     <Text style={styles.titleText}>Count of Daily Pu in the Past 2 Weeks</Text>
+                    <LineChart
+                        bezier
+                        data={puData}
+                        width={screenWidth-10}
+                        height={200}
+                        chartConfig={chartConfig}
+                        style={{
+                            paddingRight: 40,
+                            marginRight: 30,
+                        }}
+                    />
                 </View>
-                <LineChart
-                    bezier
-                    data={puData}
-                    width={screenWidth}
-                    height={200}
-                    chartConfig={chartConfig}
-                    style={{
-                        borderRadius: 20,
-                        marginBottom: 30,
-                    }}
-                />
                 <View style={styles.item}>
                     <Text style={styles.titleText}>Count of Daily Pi in the Past 2 Weeks</Text>
+                    <LineChart
+                        bezier
+                        data={piData}
+                        width={screenWidth-10}
+                        height={200}
+                        chartConfig={chartConfig}
+                        style={{
+                            paddingRight: 40,
+                            marginRight: 30,
+                        }}
+                    />
                 </View>
-                <LineChart
-                    bezier
-                    data={piData}
-                    width={screenWidth}
-                    height={200}
-                    chartConfig={chartConfig}
-                    style={{
-                        borderRadius: 20,
-                        marginBottom: 30,
-                    }}
-                />
-                </>
+                </ScrollView>
                 
                 : // if the tags are not selected or not equal
-                <Text> Select two non-equal tags.</Text>}
-
-            </ScrollView>
+                <Text>Select two non-equal tags.</Text>}
 
             
         </SafeAreaView>
@@ -291,16 +289,17 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        justifyContent: 'center'
     },
     item: {
         backgroundColor: 'white',
         flex: 1,
-        borderRadius: 20,
+        borderRadius: 10,
         padding: 10,
+        marginBottom: 20
     },
     titleText: {
-        color: '#888',
+        color: 'black',
         fontSize: 16,
-    },
+        paddingVertical: 10,
+      },
 });

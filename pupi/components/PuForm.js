@@ -9,12 +9,14 @@ import {
     Dimensions,
     Alert,
     SafeAreaView,
+    TouchableOpacity,
     ScrollView
   } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import NumericInput from 'react-native-numeric-input';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { TagSelect } from 'react-native-tag-select';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 import {Realm} from '@realm/react';
@@ -25,6 +27,19 @@ import {SessionRealmContext} from '../models';
 const {useRealm, useQuery, useObject} = SessionRealmContext;
 const windowWidth = Dimensions.get('window').width;
 
+function formatDate(date) {
+  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? "pm" : "am";
+  const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+
+  const formattedDate = `${daysOfWeek[date.getDay()]} ${months[date.getMonth()]} ${date.getDate()}, ${formattedHours}:${formattedMinutes} ${ampm}`;
+
+  return formattedDate;
+}
 /* PuForm()
  * Description: The form for users to input their pupi record
  * shape chart: https://www.webmd.com/digestive-disorders/poop-chart-bristol-stool-scale
@@ -47,6 +62,7 @@ function PuForm({route, navigation}) {
 
     //datetimepicker
     const [date, setDate] = useState(updateSession?(sessionData.timestamp):(new Date()));
+    const [dateOpen, setDateOpen] = useState(false);
 
     // duration
     const [DurationValue, setDurationValue] = useState(updateSession?(sessionData.duration):(5));
@@ -155,33 +171,31 @@ function PuForm({route, navigation}) {
     return (
         <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>
-            <View>
+
+            <View style={styles.section}>
             <Text style={styles.titleText}>Time</Text>
-            <DatePicker date={date} onDateChange={setDate} style={styles.datepickerStye}/>
-            </View>
-
-            <TagSelect
-              data={tag_array}
-              value={selected}
-              labelAttr="name"
-              keyAttr="_id"
-              ref={(tag) => {
-                this.tag = tag;
+            <TouchableOpacity 
+              style={styles.title}
+              onPress={() => setDateOpen(true)}>
+              <Text style={styles.titleText}>{formatDate(date)}</Text>
+              <Ionicons name="create-outline" size={20} />
+            </TouchableOpacity>
+            <DatePicker 
+              modal 
+              onConfirm={(date) => {
+                setDateOpen(false)
+                setDate(date)
               }}
-            />
-            <View>
-            <Text style={styles.titleText}>Duration</Text>
-                <View style={styles.numericInputStyle}>
-                    <Text><NumericInput
-                        minValue = {0}
-                        value={DurationValue}
-                        onChange={setDurationValue}
-                    />
-                    <Text style={styles.itemText}>minutes</Text></Text>
-                </View>
+              onCancel={() => {
+                setDateOpen(false)
+              }}
+              open={dateOpen}
+              date={date} 
+              onDateChange={setDate} 
+              />
             </View>
 
-            <View style={{zIndex: 3000}}>
+            <View style={styles.section}>
             <Text style={styles.titleText}>Shape</Text>
             <DropDownPicker
                 open={ShapeOpen}
@@ -193,11 +207,14 @@ function PuForm({route, navigation}) {
                 setItems={setShapeItems}
                 dropDownDirection={"AUTO"}
                 listMode="MODAL"
-                dropDownContainerStyle={{ backgroundColor: 'white',zIndex: 3000, elevation: 3000 }}
+                style={{borderColor: 'white'}}
+                labelStyle={{
+                  fontSize: 16,
+                }}
             />
             </View>
 
-            <View style={{zIndex: 2000}}>
+            <View style={styles.section}>
             <Text style={styles.titleText}>Color</Text>
             <DropDownPicker
                 open={ColorOpen}
@@ -209,27 +226,66 @@ function PuForm({route, navigation}) {
                 setItems={setColorItems}
                 dropDownDirection={"AUTO"}
                 listMode="MODAL"
-                dropDownContainerStyle={{ backgroundColor: 'white',zIndex: 2000, elevation: 2000 }}
-            />
-            </View>
-
-            <View style={{zIndex: 1000}}>
-            <Text style={styles.titleText}>Side Note</Text>
-            <TextInput
-                editable
-                multiline
-                numberOfLines={3}
-                maxLength={40}
-                onChangeText={text => onChangeText(text)}
-                value={TextValue}
-                placeholder="Side note about pu"
+                style={{borderColor: 'white'}}
+                labelStyle={{
+                  fontSize: 16,
+                }}
             />
             </View>
 
             <View>
-            <Button title="Submit" color='#00bef8' onPress={handleSubmit}  style={styles.btn}/>
+              <Text style={styles.titleText}>Effective Factors</Text>  
+              <TagSelect
+                data={tag_array}
+                value={selected}
+                itemLabelStyle={{color: 'black', fontSize: 16,}}
+                itemStyle={styles.item}
+                labelAttr="name"
+                keyAttr="_id"
+                ref={(tag) => {
+                  this.tag = tag;
+                }}
+              />
             </View>
+
+            <View style={styles.section}>
+            <Text style={styles.titleText}>Duration</Text>
+            <View style={styles.numericInputStyle}>
+                <NumericInput
+                    rounded
+                    borderColor={'#FFF'}
+                    minValue = {0}
+                    value={DurationValue}
+                    onChange={setDurationValue}
+                />
+                <Text style={styles.minutesText}>minute(s)</Text>
+            </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.titleText}>Notes</Text>
+              <View style={styles.textInputContainer}>
+                <TextInput
+                    editable
+                    multiline
+                    maxLength={100}
+                    onChangeText={text => onChangeText(text)}
+                    value={TextValue}
+                    placeholder="Side note about pu"
+                    style={styles.textInput}
+                />
+                <Text style={styles.textCharCount}>{TextValue.length}/100</Text>
+              </View>
+            </View>
+
+            <View style={styles.endEmptySpace}></View>
             </ScrollView>
+
+            <View style={styles.floatingButtonContainer}>
+              <TouchableOpacity style={styles.floatingButton} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Submit</Text>
+              </TouchableOpacity>
+            </View>
         </SafeAreaView>
     );
 }
@@ -241,16 +297,29 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollView: {
-    margin: 5,
+    padding: 10,
+    paddingTop: -5,
+  },
+  item: {
+    borderRadius: 10,
+    borderColor: '#FFF',
+    backgroundColor: '#FFF',
   },
   titleText: {
     fontSize: 20,
+    paddingVertical: 5,
   },
-  itemText: {
-    color: '#888',
+  minutesText: {
+    marginLeft: 10,
     fontSize: 16,
   },
-  btn: {
+  title: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
   dropdownIcon: {
     padding: 10,
@@ -259,10 +328,49 @@ const styles = StyleSheet.create({
     width: 25,
     resizeMode: 'stretch',
   },
-  datepickerStye:{
-    width: windowWidth
+  section: {
+    marginBottom: 10,
   },
   numericInputStyle:{
-    alignItems: 'center'
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    paddingVertical: 2,
+  },
+  textInput: {
+    padding: 10,
+    paddingTop: 10,
+  },
+  textInputContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+  },
+  textCharCount: {
+    alignSelf: 'flex-end',
+    marginBottom: 10,
+    marginRight: 10,
+  },
+  floatingButtonContainer: {
+    position: 'absolute',
+    bottom: 16, 
+    alignSelf: 'center', 
+  },
+  floatingButton: {
+    flexDirection: 'row',
+    backgroundColor: '#00bef8',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 50,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  endEmptySpace: {
+    height: 70,
   }
 });
