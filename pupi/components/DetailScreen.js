@@ -117,9 +117,10 @@ function DetailScreen({navigation}) {
         items[key].push({
           id: within_range[i]['_id'].toString(),
           start: formatTime(within_range[i]['timestamp']),
-          duration: within_range[i]['duration'],
+          color: within_range[i]['color'],
           shape: within_range[i]['stool_shape'],
           type: within_range[i]['pupi_type'],
+          notes: within_range[i]['notes']
         });
       }
     }
@@ -190,8 +191,11 @@ function DetailScreen({navigation}) {
 
                 <View>
                     <Text style={styles.itemText}>{item.start}</Text>
-                    <Text style={styles.itemText}>{item.duration} mins</Text>
-
+                    <Text style={styles.itemText}>{item.type=='pu'?(`Type ${item.shape}`):(item.color)}</Text>
+                    {(item.notes.length != 0) ?
+                    <Text style={styles.itemText}>{item.notes}</Text>
+                    : <></>}
+                    
                 </View>
               </TouchableOpacity>
             )}
