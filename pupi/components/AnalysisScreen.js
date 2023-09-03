@@ -199,6 +199,7 @@ function AnalysisScreen({route, navigation}) {
 
   const constipation_count = pu_hist_data[0] + pu_hist_data[1];
   const normal_count = pu_hist_data.reduce((a,b) => a + b, 0) - constipation_count - diarrhea_count;
+  let constipation_flag = false;
 
   let histogram_quip = "";
   if (diarrhea_count > 0) {
@@ -207,6 +208,7 @@ function AnalysisScreen({route, navigation}) {
     histogram_quip = normal_quip;
   } else {
     histogram_quip = constipation_quip;
+    constipation_flag = true;
   }
 
   const avg_pu_freq_quip = `On average, you're defecating ${pu_avg} times a week. `;
@@ -233,9 +235,11 @@ function AnalysisScreen({route, navigation}) {
   const lo_pi_freq_quip = "The normal amount is 6-7 times per day. Are you drinking enough liquids?";
   const normal_pi_freq_quip = "This is around the normal frequency of 6-7 times a day.";
   const hi_pi_freq_quip = "Most people urinate 6-7 times a day, but you seem extra hydrated, well done!";
+  let dehydrate_flag = false;
   let pi_freq_quip = avg_pi_freq_quip;
 
   if (pi_avg < 4.5) {
+    dehydrate_flag = true;
     pi_freq_quip += lo_pi_freq_quip;
   } else if (pi_avg < 8.5) {
     pi_freq_quip += normal_pi_freq_quip;
@@ -264,6 +268,16 @@ function AnalysisScreen({route, navigation}) {
           <View style={styles.item}>
             <Text style={styles.titleText}>Histogram of Pu Shapes in the Past 2 Weeks</Text>
             <Text style={styles.descText}>{histogram_quip}</Text>
+            {constipation_flag?
+            <>
+            <View style={styles.flexRow}>
+              <Text style={styles.notifText}>Consider setting up reminders to take fiber supplements with your meals!</Text>
+              <TouchableOpacity style={styles.notifButton} onPress={() => navigation.navigate('Reminders')}>
+                <Ionicons name="notifications"  color={"white"} size={20} />
+              </TouchableOpacity>
+            </View>
+            </>:
+            <></>}
             <BarChart
               data={puHistData}
               width={screenWidth-50}
@@ -295,6 +309,16 @@ function AnalysisScreen({route, navigation}) {
           <View style={styles.lastItem}>
             <Text style={styles.titleText}>Count of Daily Pi in the Past 2 Weeks</Text>
             <Text style={styles.descText}>{pi_freq_quip}</Text>
+            {dehydrate_flag?
+            <>
+            <View style={styles.flexRow}>
+              <Text style={styles.notifText}>Consider setting up a daily reminder to stay hydrated!</Text>
+              <TouchableOpacity style={styles.notifButton} onPress={() => navigation.navigate('Reminders')}>
+                <Ionicons name="notifications"  color={"white"} size={20} />
+              </TouchableOpacity>
+            </View>
+            </>:
+            <></>}
             <LineChart
               data={piData}
               width={screenWidth-30}
@@ -345,6 +369,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 10,
   },
+  notifText: {
+    flex: 1,
+    color: '#888',
+    fontSize: 14,
+    paddingRight: 10,
+  },
   descText: {
     color: '#888',
     fontSize: 14,
@@ -369,4 +399,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 8,
   },
+  notifButton: {
+    alignSelf: 'flex-end',
+    flexDirection: 'row',
+    backgroundColor: '#00bef8',
+    padding: 6,
+    borderRadius: 100,
+  },
+  flexRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 10,
+  }
 });
