@@ -10,6 +10,8 @@ import AnalysisScreen from './components/AnalysisScreen';
 import PuForm from './components/PuForm';
 import PiForm from './components/PiForm';
 import ComparisonCharts from './components/ComparisonCharts';
+import NotifScreen from './components/NotifScreen';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import React, { useState, useEffect } from 'react';
 
@@ -115,6 +117,7 @@ export default function App() {
   const did_setup = useQuery(Setup);
   useEffect(() => {
     if (did_setup.length == 0) {
+      PushNotificationIOS.requestPermissions();
       const demo_data = require('./assets/pupi_demo_data.json')
       for (i = 0; i < demo_data.length; i++) {
         
@@ -142,6 +145,7 @@ export default function App() {
         return new Setup(realm, {});
       });
     }
+    
     console.log("setup?");
     console.log(did_setup);
   }, []);
@@ -171,6 +175,16 @@ export default function App() {
                   </TouchableOpacity>
                   </View>
                 ),
+                headerLeft: () => (
+                  <View style={{ flexDirection:"row", alignItems: 'center'}}>
+                  <TouchableOpacity onPress={() => navigation.navigate('Pi', {sessionId: ""})}>
+                    <Ionicons name="share" color={'black'} size={30} style={{marginRight: 5}}/>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => navigation.navigate('Reminders', {sessionId: ""})}>
+                    <Ionicons name="notifications" color={'black'} size={28}/>
+                  </TouchableOpacity>
+                  </View>
+                ),
               })}
             />
           </Stack.Group>
@@ -178,6 +192,7 @@ export default function App() {
             <Stack.Screen name="Pu" component={PuForm} />
             <Stack.Screen name="Pi" component={PiForm} />
             <Stack.Screen name="Comparison" component={ComparisonCharts} />
+            <Stack.Screen name="Reminders" component={NotifScreen} />
           </Stack.Group>
           </Stack.Navigator>
         </NavigationContainer>

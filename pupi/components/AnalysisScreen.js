@@ -161,7 +161,7 @@ function AnalysisScreen({route, navigation}) {
     decimalPlaces: 1, // optional, defaults to 2dp
     labelColor: (opacity = 1) => `rgba(100, 100, 100, ${opacity})`,
     propsForBackgroundLines: {
-      stroke: '#DDDDDD',
+      stroke: '#ECECEC',
     },
   };
   const puChartConfig = {
@@ -199,6 +199,7 @@ function AnalysisScreen({route, navigation}) {
 
   const constipation_count = pu_hist_data[0] + pu_hist_data[1];
   const normal_count = pu_hist_data.reduce((a,b) => a + b, 0) - constipation_count - diarrhea_count;
+  let constipation_flag = false;
 
   let histogram_quip = "";
   if (diarrhea_count > 0) {
@@ -207,6 +208,7 @@ function AnalysisScreen({route, navigation}) {
     histogram_quip = normal_quip;
   } else {
     histogram_quip = constipation_quip;
+    constipation_flag = true;
   }
 
   const avg_pu_freq_quip = `On average, you're defecating ${pu_avg} times a week. `;
@@ -233,9 +235,11 @@ function AnalysisScreen({route, navigation}) {
   const lo_pi_freq_quip = "The normal amount is 6-7 times per day. Are you drinking enough liquids?";
   const normal_pi_freq_quip = "This is around the normal frequency of 6-7 times a day.";
   const hi_pi_freq_quip = "Most people urinate 6-7 times a day, but you seem extra hydrated, well done!";
+  let dehydrate_flag = false;
   let pi_freq_quip = avg_pi_freq_quip;
 
   if (pi_avg < 4.5) {
+    dehydrate_flag = true;
     pi_freq_quip += lo_pi_freq_quip;
   } else if (pi_avg < 8.5) {
     pi_freq_quip += normal_pi_freq_quip;
@@ -258,62 +262,75 @@ function AnalysisScreen({route, navigation}) {
           placeholder="Filter entries by tag"
         />
       <ScrollView
-        contentInsetAdjustmentBehavior="automatic">
+        contentInsetAdjustmentBehavior="automatic"
+        style={{padding: 10}}>
           
           <View style={styles.item}>
-            <Text style={styles.titleText}>Histogram of Bristol Stool Types in the Past 2 Weeks</Text>
-          </View>
-          <View style={styles.item}>
+            <Text style={styles.titleText}>Histogram of Pu Shapes in the Past 2 Weeks</Text>
             <Text style={styles.descText}>{histogram_quip}</Text>
+            {constipation_flag?
+            <>
+            <View style={styles.flexRow}>
+              <Text style={styles.notifText}>Consider setting up reminders to take fiber supplements with your meals!</Text>
+              <TouchableOpacity style={styles.notifButton} onPress={() => navigation.navigate('Reminders')}>
+                <Ionicons name="notifications"  color={"white"} size={20} />
+              </TouchableOpacity>
+            </View>
+            </>:
+            <></>}
+            <BarChart
+              data={puHistData}
+              width={screenWidth-50}
+              height={200}
+              chartConfig={puHistChartConfig}
+              style={{
+                paddingRight: 40,
+              }}
+              fromZero={true}
+              showValuesOnTopOfBars={true}
+              withInnerLines={false}
+            />
           </View>
-          <BarChart
-            data={puHistData}
-            width={screenWidth}
-            height={200}
-            chartConfig={puHistChartConfig}
-            style={{
-              borderRadius: 20,
-              paddingRight: 50,
-              marginBottom: 30,
-            }}
-            fromZero={true}
-            showValuesOnTopOfBars={true}
-            withInnerLines={false}
-          />
           <View style={styles.item}>
             <Text style={styles.titleText}>Count of Daily Pu in the Past 2 Weeks</Text>
-          </View>
-          <View style={styles.item}>
             <Text style={styles.descText}>{pu_freq_quip}</Text>
+            <LineChart
+              data={puData}
+              width={screenWidth-30}
+              height={220}
+              chartConfig={puChartConfig}
+              style={{
+                paddingRight: 40,
+                marginRight: 10,
+              }}
+              fromZero={true}
+            />
           </View>
-          <LineChart
-            data={puData}
-            width={screenWidth}
-            height={220}
-            chartConfig={puChartConfig}
-            style={{
-              borderRadius: 20,
-              marginBottom: 30,
-            }}
-            fromZero={true}
-          />
-          <View style={styles.item}>
+          <View style={styles.lastItem}>
             <Text style={styles.titleText}>Count of Daily Pi in the Past 2 Weeks</Text>
-          </View>
-          <View style={styles.item}>
             <Text style={styles.descText}>{pi_freq_quip}</Text>
+            {dehydrate_flag?
+            <>
+            <View style={styles.flexRow}>
+              <Text style={styles.notifText}>Consider setting up a daily reminder to stay hydrated!</Text>
+              <TouchableOpacity style={styles.notifButton} onPress={() => navigation.navigate('Reminders')}>
+                <Ionicons name="notifications"  color={"white"} size={20} />
+              </TouchableOpacity>
+            </View>
+            </>:
+            <></>}
+            <LineChart
+              data={piData}
+              width={screenWidth-30}
+              height={220}
+              chartConfig={piChartConfig}
+              style={{
+                paddingRight: 40,
+                marginRight: 10,
+              }}
+              fromZero={true}
+            />
           </View>
-          <LineChart
-            data={piData}
-            width={screenWidth}
-            height={220}
-            chartConfig={piChartConfig}
-            style={{
-              borderRadius: 20,
-              paddingBottom: 40,
-            }}
-            fromZero={true}
-          />
 
       </ScrollView>
       <View style={styles.floatingButtonContainer}>
@@ -336,16 +353,32 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: 'white',
     flex: 1,
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 10,
+    marginBottom: 20
+  },
+  lastItem: {
+    backgroundColor: 'white',
+    flex: 1,
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 80
   },
   titleText: {
-    color: '#888',
+    color: 'black',
     fontSize: 16,
+    paddingVertical: 10,
+  },
+  notifText: {
+    flex: 1,
+    color: '#888',
+    fontSize: 14,
+    paddingRight: 10,
   },
   descText: {
     color: '#888',
     fontSize: 14,
+    paddingBottom: 10,
   },
   floatingButtonContainer: {
     position: 'absolute',
@@ -366,4 +399,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 8,
   },
+  notifButton: {
+    alignSelf: 'flex-end',
+    flexDirection: 'row',
+    backgroundColor: '#00bef8',
+    padding: 6,
+    borderRadius: 100,
+  },
+  flexRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 10,
+  }
 });

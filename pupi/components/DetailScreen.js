@@ -24,7 +24,14 @@ const formatDate = d => [
 ].join('-');
 
 function formatTime(date) {
-  return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? "pm" : "am";
+  const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+
+  const formattedDate = `${formattedHours}:${formattedMinutes} ${ampm}`;
+  return formattedDate;
 }
 /* DetailScreen()
  * Description: Shows detailed record of your pupi.
@@ -110,9 +117,10 @@ function DetailScreen({navigation}) {
         items[key].push({
           id: within_range[i]['_id'].toString(),
           start: formatTime(within_range[i]['timestamp']),
-          duration: within_range[i]['duration'],
+          color: within_range[i]['color'],
           shape: within_range[i]['stool_shape'],
           type: within_range[i]['pupi_type'],
+          notes: within_range[i]['notes']
         });
       }
     }
@@ -183,8 +191,11 @@ function DetailScreen({navigation}) {
 
                 <View>
                     <Text style={styles.itemText}>{item.start}</Text>
-                    <Text style={styles.itemText}>{item.duration} mins</Text>
-
+                    <Text style={styles.itemText}>{item.type=='pu'?(`Type ${item.shape}`):(item.color)}</Text>
+                    {(item.notes.length != 0) ?
+                    <Text style={styles.itemText}>{item.notes}</Text>
+                    : <></>}
+                    
                 </View>
               </TouchableOpacity>
             )}
@@ -203,7 +214,7 @@ const styles = StyleSheet.create({
   pi_entry: {
     backgroundColor: '#fffbeb',
     flex: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 10,
     marginRight: 10,
     marginTop: 17,
@@ -213,7 +224,7 @@ const styles = StyleSheet.create({
   pu_entry: {
     backgroundColor: '#e6d9d3',
     flex: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 10,
     marginRight: 10,
     marginTop: 17,
