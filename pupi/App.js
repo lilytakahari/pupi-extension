@@ -11,6 +11,7 @@ import PuForm from './components/PuForm';
 import PiForm from './components/PiForm';
 import ComparisonCharts from './components/ComparisonCharts';
 import NotifScreen from './components/NotifScreen';
+import ShareScreen from './components/ShareScreen';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import React, { useState, useEffect } from 'react';
@@ -177,7 +178,7 @@ export default function App() {
                 ),
                 headerLeft: () => (
                   <View style={{ flexDirection:"row", alignItems: 'center'}}>
-                  <TouchableOpacity onPress={() => navigation.navigate('Pi', {sessionId: ""})}>
+                  <TouchableOpacity onPress={() => navigation.navigate('Export Data', {sessionId: ""})}>
                     <Ionicons name="share" color={'black'} size={30} style={{marginRight: 5}}/>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => navigation.navigate('Reminders', {sessionId: ""})}>
@@ -193,6 +194,7 @@ export default function App() {
             <Stack.Screen name="Pi" component={PiForm} />
             <Stack.Screen name="Comparison" component={ComparisonCharts} />
             <Stack.Screen name="Reminders" component={NotifScreen} />
+            <Stack.Screen name="Export Data" component={ShareScreen} />
           </Stack.Group>
           </Stack.Navigator>
         </NavigationContainer>
