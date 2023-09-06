@@ -91,7 +91,6 @@ function DetailScreen({navigation}) {
   }, [sessions, chosen_tag]);
 
   function loadMonth(calendar_obj) {
-    console.log(chosen_tag);
     const items = {};
     const utc_timestamp = calendar_obj.timestamp;
     const month = calendar_obj.month.toString().padStart(2, '0');
@@ -124,7 +123,6 @@ function DetailScreen({navigation}) {
         });
       }
     }
-    console.log('update items');
     setAgendaItems(items);
   }
 

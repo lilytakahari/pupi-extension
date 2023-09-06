@@ -116,16 +116,10 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const realm = useRealm();
   const did_setup = useQuery(Setup);
+  const tags = useQuery(Tag);
   useEffect(() => {
     if (did_setup.length == 0) {
       PushNotificationIOS.requestPermissions();
-      const demo_data = require('./assets/pupi_demo_data.json')
-      for (i = 0; i < demo_data.length; i++) {
-        
-        realm.write(() => {
-          return new Session(realm, demo_data[i]);
-        });
-      }
       realm.write(() => {
         return new Tag(realm, {name: 'Good hydration'});
       });
@@ -141,14 +135,23 @@ export default function App() {
       realm.write(() => {
         return new Tag(realm, {name: 'Menstruation'});
       });
+
+      const demo_data = require('./assets/pupi_demo_data.json')
+      for (i = 0; i < demo_data.length; i++) {
+        let curr = demo_data[i];
+        const tag = tags.filtered('name == $0', curr.tags);
+        curr.tags = tag;
+
+        realm.write(() => {
+          return new Session(realm, curr);
+        });
+      }
+
       // register that we have setup to Realm
       realm.write(() => {
         return new Setup(realm, {});
       });
     }
-    
-    console.log("setup?");
-    console.log(did_setup);
   }, []);
   
   return (

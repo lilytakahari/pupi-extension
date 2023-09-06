@@ -115,9 +115,6 @@ function AnalysisScreen({route, navigation}) {
   for (let value of pu_count.values()){
     pu_data.push(value);
   }
-  console.log(pu_hist_data);
-  console.log(pu_data);
-  console.log(pi_data);
   const arrAvg = arr => arr.reduce((a,b) => a + b, 0) / arr.length;
   const weekAvg = arr => arr.reduce((a,b) => a + b, 0) / 2;
   const pi_avg = arrAvg(pi_data).toFixed(2);
