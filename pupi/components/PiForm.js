@@ -136,6 +136,28 @@ function PiForm({route, navigation}) {
     const tag_array = Array.from(tag_list);
 
     const selected = updateSession?(Array.from(sessionData.tags)):([]);
+
+    const handleNewFactor = (name) => {
+      const tag_exists = tag_list.filtered('name ==[c] $0', name);
+      if (tag_exists.length == 0) {
+        realm.write(() => {
+          realm.create(
+              'Tag', 
+              {name: name},
+          );}
+        );
+        Alert.alert('Success');
+      } else {
+        Alert.alert('Factor already exists');
+      }
+    }
+    const onNewFactorPress = () => {
+      Alert.prompt(
+        'Name of new factor:',
+        '',
+        handleNewFactor
+      );
+    }
     
 
     return (
@@ -184,7 +206,15 @@ function PiForm({route, navigation}) {
             </View>
 
             <View>
-            <Text style={styles.titleText}>Effective Factors</Text>
+              <View style={styles.factorsRow}>
+                <Text style={styles.titleText}>Effective Factors</Text>
+                <TouchableOpacity style={styles.addButton}
+                  onPress={onNewFactorPress}>
+                <Ionicons name="add-circle-outline" size={20} />
+                  <Text style={{fontSize: 16, paddingLeft: 2,}}>New Factor</Text>
+                </TouchableOpacity>
+              </View>
+            
             <TagSelect
               data={tag_array}
               value={selected}
@@ -274,6 +304,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     backgroundColor: 'white',
+  },
+  addButton: {
+    flex: 1,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  factorsRow: {
+    flex: 1,
+    flexDirection:'row',
+    justifyContent: 'flex-end',
   },
   dropdownIcon: {
     padding: 10,
