@@ -4,7 +4,7 @@
  *
  * @format
  */
-
+import 'react-native-get-random-values';
 import DetailScreen from './components/DetailScreen';
 import AnalysisScreen from './components/AnalysisScreen';
 import PuForm from './components/PuForm';

@@ -9,6 +9,7 @@ import {
     Alert,
 } from 'react-native';
 
+import 'react-native-get-random-values';
 import {Realm} from '@realm/react';
 
 import { useState } from 'react';

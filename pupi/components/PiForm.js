@@ -18,6 +18,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { TagSelect } from 'react-native-tag-select';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import 'react-native-get-random-values';
 import {Realm} from '@realm/react';
 import {Session} from '../models/Session';
 import {Tag} from '../models/Tag';

@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import {Realm} from '@realm/react';
 
 export class Reminder extends Realm.Object {
